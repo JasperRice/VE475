@@ -1,6 +1,6 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
 % \usepackage[demo]{graphicx}
 
@@ -36,7 +36,6 @@
 	\end{figure}
 }
 
-
 \title{
 	Homework 1\\
 	VE475 Introduction to Cryptography
@@ -55,7 +54,7 @@
 \begin{enumerate}
 	\item Since Alice uses Caesar cipher and we already known the ciphertext, we can apply CCA to decrypt the ciphertext, ``EVIRE''. So, the $25$ possible names of the place are: \textit{duhqd}, \textit{ctgpc}, \textit{bsfob}, \textit{arena}, \textit{zqdmz}, \textit{ypcly}, \textit{xobkx}, \textit{wnajw}, \textit{vmziv}, \textit{ulyhu}, \textit{tkxgt}, \textit{sjwfs}, \textit{river}, \textit{qhudq}, \textit{pgtcp}, \textit{ofsbo}, \textit{neran}, \textit{mdqzm}, \textit{lcpyl}, \textit{kboxk}, \textit{janwj}, \textit{izmvi}, \textit{hyluh}, \textit{gxktg}, or \textit{fwjsf}. However, only ``\textit{arena}'' and ``\textit{river}'' are meaningful, which could be the meeting place.
 	
-	\item Since the length of plaintext \textit{dont} is $4$, reasonable size of the key should be $2\times 2$. Label letters as integers from $0$ to $25$, the plaintext then is $\begin{pmatrix} 3 & 14 & 13 & 19 \end{pmatrix}$ and the ciphertext is $\begin{pmatrix} 4 & 11 & 13 & 8 \end{pmatrix}$.
+	\item Since the length of plaintext \textit{dont} is $4$, reasonable size of the key should be $2\times 2$. Label letters as integers from $0$ to $25$, the plaintext then is $\begin{pmatrix} 3 & 14 & 13 & 19 \end{pmatrix}$ and the ciphertext is $\begin{pmatrix} 4 & 11 & 13 & 8 \end{pmatrix}$. After splitting the letters, we would have
 	\begin{align*}
 		\underbrace{\begin{pmatrix} 3 & 14 \\ 13 & 19 \end{pmatrix}}_{A} \cdot \begin{pmatrix} a & b \\ c & d \end{pmatrix} \equiv \begin{pmatrix} 4 & 11 \\ 13 & 8 \end{pmatrix} \mod 26 
 	\end{align*}
@@ -69,8 +68,32 @@
 	\end{align*}
 	\par So, the encryption matrix is $K = \begin{pmatrix} 10 & 9 \\ 13 & 23 \end{pmatrix}$.
 	
-	\item 
+	\item We can suppose that $n | b$ is wrong, which gives $b = kn + d$, where $k$ and $d$ are integers and $d \in (0, n)$. Since $n|ab$, we would have $ab = ln$, where $l$ is an integer. After combining two relations above, we have
+	\begin{align*}
+		a(kn + d) &= ln \\
+		akn + ad &= ln \\
+		ad &= (l - ak)n \\
+		\frac{ad}{n} &= l - ak
+	\end{align*}
+	\par Since $l - ak$ is an integer, so should $\frac{ad}{n}$ be an integer. However, since $\gcd(a, n) = 1$ and $d \in (0, n)$, which gives $n \nmid a$ and $n \nmid d$, $\frac{ad}{n}$ could not be an integer. So, the assumption is wrong and $n | b$.
+	
+	\item Applying Euclidean algorithm
+	\begin{align*}
+		30030 &= 116 \times 257 + 218 \\
+		257 &= 1 \times 218 + 39 \\
+		218 &= 5 \times 39 + 23 \\
+		39 &= 1 \times 23 + 16 \\
+		23 &= 1 \times 16 + 7 \\
+		16 &= 2 \times 7 + 2 \\
+		7 &= 3 \times 2 + 1 \\
+		2 &= 2 \times 1
+	\end{align*}
+	\par So, $\gcd(30030, 257) = 1$.
+	\par Since $16^{2} = 256 < 257 < 289 = 17^{2}$, the factor of $257$ could only be obtained from $2$, $3$, $5$, $7$, $11$, and $13$. However, none of these primes can exact divide $257$. So, $257$ is a prime.
+	
+	\item The main reason it is dangerous is that after applying the same key twice in the OTP, the ciphertext would be the same with the plaintext before encryption.
 \end{enumerate}
+
 
 \section*{Ex. 2 - }
 	

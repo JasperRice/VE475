@@ -1,3 +1,4 @@
 close all; clear; clc;
-a = -125; b = 26;
+
+a = 30030; b = 257;
 [r1, s1, t1] = extendedEuclidean(a, b);

@@ -91,10 +91,40 @@
 	\par So, $\gcd(30030, 257) = 1$.
 	\par Since $16^{2} = 256 < 257 < 289 = 17^{2}$, the factor of $257$ could only be obtained from $2$, $3$, $5$, $7$, $11$, and $13$. However, none of these primes can exact divide $257$. So, $257$ is a prime.
 	
-	\item The main reason it is dangerous is that after applying the same key twice in the OTP, the ciphertext would be the same with the plaintext before encryption.
+	\item Once Eve got the key and if the same key is used to encrypt the plaintext, Eve can easily break the ciphertext by using the key to XOR the ciphertext, which can be seen from tab~\ref{tab:XOR}.
+	\begin{table}[!ht]
+		\caption{Truth table.}
+		\label{tab:XOR}
+		\centering
+		\begin{tabular}{|c|c|c|c|}
+			\hline 
+			$a$ & $k$ & $a^{\wedge}k$ & $(a^{\wedge}k)^{\wedge}k$ \\ 
+			\hline 
+			1 & 1 & 0 & 1 \\ 
+			\hline 
+			1 & 0 & 1 & 1 \\ 
+			\hline 
+			0 & 1 & 1 & 0 \\ 
+			\hline 
+			0 & 0 & 0 & 0 \\ 
+			\hline 
+		\end{tabular}
+	\end{table}
+	
+	\item Being secure meaning it should take at least $2^{128}$ operations to break the encryption. So
+	\begin{align*}
+		\sqrt{n\log n} &\geq 128 \\
+		n &\geq 4486.4
+	\end{align*}
+	\par So, the size of $4487$ (or larger) should be used for the graph to be secure.
 \end{enumerate}
 
 
-\section*{Ex. 2 - }
+\section*{Ex. 2 - Vigen\`{e}re cipher}
+\begin{enumerate}
+	\item 
+	
+	\item 
+\end{enumerate}
 	
 \end{document}

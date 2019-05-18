@@ -53,9 +53,21 @@
 
 \section*{Ex. 1 - Simple questions}
 \begin{enumerate}
-	\item Since Alice uses Caesar cipher and we already known the ciphertext, we can apply CCA to decrypt the ciphertext, ``EVIRE''. So, the $25$ possible names of the place are: DUHQD, CTGPC, BSFOB, ARENA, ZQDMZ, YPCLY, XOBKX, WNAJW, VMZIV, ULYHU, TKXGT, SJWFS, RIVER, QHUDQ, PGTCP, OFSBO, NERAN, MDQZM, LCPYL, KBOXK, JANWJ, IZMVI, HYLUH, GXKTG, or FWJSF. However, only ``ARENA'' and ``RIVER'' are meaningful, which could be the meeting place.
+	\item Since Alice uses Caesar cipher and we already known the ciphertext, we can apply CCA to decrypt the ciphertext, ``EVIRE''. So, the $25$ possible names of the place are: \textit{duhqd}, \textit{ctgpc}, \textit{bsfob}, \textit{arena}, \textit{zqdmz}, \textit{ypcly}, \textit{xobkx}, \textit{wnajw}, \textit{vmziv}, \textit{ulyhu}, \textit{tkxgt}, \textit{sjwfs}, \textit{river}, \textit{qhudq}, \textit{pgtcp}, \textit{ofsbo}, \textit{neran}, \textit{mdqzm}, \textit{lcpyl}, \textit{kboxk}, \textit{janwj}, \textit{izmvi}, \textit{hyluh}, \textit{gxktg}, or \textit{fwjsf}. However, only ``\textit{arena}'' and ``\textit{river}'' are meaningful, which could be the meeting place.
 	
-	\item 
+	\item Since the length of plaintext \textit{dont} is $4$, reasonable size of the key should be $2\times 2$. Label letters as integers from $0$ to $25$, the plaintext then is $\begin{pmatrix} 3 & 14 & 13 & 19 \end{pmatrix}$ and the ciphertext is $\begin{pmatrix} 4 & 11 & 13 & 8 \end{pmatrix}$.
+	\begin{align*}
+		\underbrace{\begin{pmatrix} 3 & 14 \\ 13 & 19 \end{pmatrix}}_{A} \cdot \begin{pmatrix} a & b \\ c & d \end{pmatrix} \equiv \begin{pmatrix} 4 & 11 \\ 13 & 8 \end{pmatrix} \mod 26 
+	\end{align*}
+	\par Since $\det(A)=-125$ and $\gcd(-125, 26)=1$, $A$ is invertible modulo $26$. Also, we can obtain that $-5$ is the multiplicative inverse of $-125$ modulo $26$ by applying extended Euclidean algorithm. We can then calculate
+	\begin{align*}
+		K = \begin{pmatrix} a & b \\ c & d \end{pmatrix} &\equiv \begin{pmatrix} 3 & 14 \\ 13 & 19 \end{pmatrix}^{-1} \cdot \begin{pmatrix} 4 & 11 \\ 13 & 8 \end{pmatrix} \mod 26 \\
+		&\equiv \frac{1}{-125} \cdot \begin{pmatrix} 19 & -14 \\ -13 & 3 \end{pmatrix} \cdot \begin{pmatrix} 4 & 11 \\ 13 & 8 \end{pmatrix} \mod 26 \\
+		&\equiv \frac{1}{-125} \cdot \begin{pmatrix} -106 & 97 \\ -13 & -119 \end{pmatrix} \mod 26 \\
+		&\equiv \begin{pmatrix} 530 & -485 \\ 65 & 595 \end{pmatrix} \mod 26 \\
+		&\equiv \begin{pmatrix} 10 & 9 \\ 13 & 23 \end{pmatrix} \mod 26
+	\end{align*}
+	\par So, the encryption matrix is $K = \begin{pmatrix} 10 & 9 \\ 13 & 23 \end{pmatrix}$.
 	
 	\item 
 \end{enumerate}

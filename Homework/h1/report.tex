@@ -27,6 +27,9 @@
 
 \pgfplotsset{compat=1.13}
 
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
 \newcommand{\image}[3]{
 	\begin{figure}[!ht]
 		\centering
@@ -36,9 +39,9 @@
 	\end{figure}
 }
 
-\title{
-	Homework 1\\
-	VE475 Introduction to Cryptography
+\title{	
+	VE475 Introduction to Cryptography \\
+	Homework 1
 }
 \author{
 	Jiang, Sifan\\
@@ -122,9 +125,21 @@
 
 \section*{Ex. 2 - Vigen\`{e}re cipher}
 \begin{enumerate}
-	\item 
+	\item The main idea of Vigen\`{e}re cipher is to use Caesar ciphers on each single letter but with different shifts (keys). To clearly explain how Vigen\`{e}re cipher works, an example would be used.
+	\par If we are going to encrypt ``goodmorning'', basically, we need to first have a key word we same length of the plaintext. Here, we use ``havenicetea''. Now for each letter in the plaintext, we can find the letter at the top row. Then, find the corresponding key letter at the left column. With two letters, we can find a letter in the table, which is illustrated in fig~\ref{fig:VCTable}.
+	\par Conducting the procedure above for each letter in the plaintext, and finally we would get the ciphertext, ``NOJHZWTRBRG''.
+	\image{0.65}{VCTable}{Standard Vigen\`{e}re cipher table.}
 	
-	\item 
+	\item
+	\begin{enumerate}[a)]
+		\item Since the ciphertext has a repeating pattern, Eve can make sure that the plaintext must be something repeated. And based on some guess, Eve can suspect that the plaintext is one repeated letter.
+		
+		\item By looking for the repeating pattern of the ciphertext and counting the number of letters in each loop, Eve can easily obtain the length $l=6$.
+		
+		\item Eve can choose one letter from $26$ letters as the plaintext that Bob sent. And with the ciphertext, she can get $26$ different possible keys with $6$ letters. Since no English word of length six is a shift of another English word, she can try to shift though possible keys to find the real key.
+	\end{enumerate}
 \end{enumerate}
-	
+
+\section*{Ex. 3 - Programming}
+
 \end{document}

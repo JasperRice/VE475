@@ -1,10 +1,7 @@
 all: main
 
-main: main.o
-	g++ -o main main.o
-
-main.o: main.cpp
-	g++ -c main.cpp
+main:
+	g++-7 main.cpp -lgmp -lgmpxx -o main
 
 clean:
-	rm -f main *.o
+	rm -f main

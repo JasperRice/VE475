@@ -79,9 +79,24 @@
 		\end{align*}
 	\par Since $x \in Z$, $x = 59k + 22$, where $k \in Z$.
 	
-	\item ?????
+	\item
+		\begin{itemize}
+			\item If $c \equiv 0 \equiv m^{7} \mod 31$, we would also have $m \equiv 0 \mod 31$.
+			\item Otherwise, since $31$ is a prime and in this case $m \nmid 31$, we would have $\gcd(m, 31) = 1$. So, according to Fermat's Little Theorem, we would obtain
+				\begin{align*}
+					m^{30} &\equiv 1 \mod 31 \\
+					m^{31} &\equiv m \mod 31
+				\end{align*}
+		\end{itemize}
+	\par Since $\gcd(7, 30) = 1$, we can find the multiplicative inverse of $7$ modulo $30$, which is $13$. We would have $7 \times 13 + 30 \times (-3) = 1$. Then, following relation would be obtained
+		\begin{align*}
+			c^{13} &\equiv (m^{7})^{13} \mod 31 \\
+			&\equiv (m^{30})^{3} \cdot m \mod 31 \\
+			&\equiv m \mod 31
+		\end{align*}
+	\par In conclusion, to decrypt the message, we need to calculate $c^{13}$ modulo $31$. The result would gives $m$.
 	
-	\item Since $4883 < 70^{2}$and $4369 < 67^{2}$, the smallest prime factor should be found from: $2$, $3$, $5$, $7$, $11$, $13$, $17$, $19$, $23$, $29$, $31$,, $37$, $41$, $43$, $47$, $53$, $59$, $61$, and $67$. So, we would have $4883 = 19 \times 257$. Since $19$ is the smallest factor of $4883$ and $257 < 17^{2}$, we can conclude that $257$ is also a prime. Similarly, we would also have $4369 = 17 \times 257$, where $257$ is also a prime. In conclusion, we have
+	\item Since $4883 < 70^{2}$and $4369 < 67^{2}$, the smallest prime factor should be found from: $2$, $3$, $5$, $7$, $11$, $13$, $17$, $19$, $23$, $29$, $31$, $37$, $41$, $43$, $47$, $53$, $59$, $61$, and $67$. So, we would have $4883 = 19 \times 257$. Since $19$ is the smallest factor of $4883$ and $257 < 17^{2}$, we can conclude that $257$ is also a prime. Similarly, we would also have $4369 = 17 \times 257$, where $257$ is also a prime. In conclusion, we have
 		\begin{align*}
 			4883 &= 19 \times 257 \\
 			4369 &= 17 \times 257
@@ -105,9 +120,27 @@
 			2^{2017} \equiv 4 \times 32^{403} \equiv 4 \times 1^{403} &\equiv 4 \mod 31
 		\end{align*}
 	\par Since $2015 = 5 \times 13 \times 31$, we could apply Chinese remainder theorem to find $2^{2017} \mod 2015$.
-		\begin{align*}
-			?????
-		\end{align*}
+		\begin{itemize}
+			\item Step 1: Since $\gcd(13, 31) = 1$ and $13 \times 31 = 403$, we need to find the multiplicative inverse of $403$ modulo $5$ which is $2$. With similar procedure, we would obtain
+				\begin{align*}
+					\mbox{Common\_multiple}(13, 31) \equiv 806 &\equiv 1 \mod 5 \\
+					\mbox{Common\_multiple}(31, 5) \equiv -155 &\equiv 1 \mod 13 \\
+					\mbox{Common\_multiple}(5, 13) \equiv -650 &\equiv 1 \mod 31
+				\end{align*}
+			\item Step 2:
+				\begin{align*}
+					806 \times 2 &= 1612 \\
+					-155 \times 2 &= -310 \\
+					-650 \times 4 &= -2600 \\					
+					1612 -310 -2600 &= -1298
+				\end{align*}
+				
+			\item Step 3:
+				\begin{align*}
+					2^{2017} &\equiv -1298 \mod 2015 \\
+					&\equiv 717 \mod 2015
+				\end{align*}
+		\end{itemize}
 	
 \end{enumerate}
 
@@ -128,23 +161,24 @@
 	\begin{itemize}
 		\item Step 1:
 			\begin{align*}
-				&\mbox{Common\_multiple}(3, 4) \equiv 36 \equiv 1 \mod 5 \\
 				&\mbox{Common\_multiple}(4, 5) \equiv 40 \equiv 1 \mod 3 \\
 				&\mbox{Common\_multiple}(5, 3) \equiv 45 \equiv 1 \mod 4 \\
+				&\mbox{Common\_multiple}(3, 4) \equiv 36 \equiv 1 \mod 5
 			\end{align*}
 			
 		\item Step 2:
 			\begin{align*}
-				36 \times 3 &= 108 \\
 				40 \times 1 &= 40 \\
 				45 \times 2 &= 90 \\
-				108 + 40 + 90 &= 238
+				36 \times 3 &= 108 \\
+				40 + 90 + 108 &= 238
 			\end{align*}
 			
 		\item Step 3:
 			\begin{align*}
 				x &\equiv 238 \mod \mbox{Lowest\_common\_multiple} (3, 4 , 5) \\
-				&\equiv 58 \mod 60
+				&\equiv 58 \mod 60 \\
+				&\equiv 118 \mod 60 \\
 			\end{align*}
 	\end{itemize}
 \par So the two smallest possible number of people in the group are $58$ and $118$.

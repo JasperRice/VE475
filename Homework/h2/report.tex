@@ -147,11 +147,18 @@
 
 \section*{Ex. 2 - Rabin cryptosystem}
 \begin{enumerate}
-	\item 
+	\item The Rabin cryptosystem uses a private key and a public key at the same time. The system works as followed.
+	\par First, choose two large different primes $p$ and $q$. The primes $p$ and $q$ are the private key and let $n = pq$ be the public key. The public key is used in the encryption while the private key is required in the decryption.
+	\par Then in the encryption part, let $m \in \{ 0, \cdots, n-1 \}$ be the plaintext. And the ciphertext $c$ is determined by
+		\begin{align*}
+			c &= m^{2} \mod n
+		\end{align*}
+	\par And for most of the ciphertexts, there are four possible plaintexts could lead to the same ciphertext.
+
 \end{enumerate}
 
 \section*{Ex. 3 - CRT}
-\par Assume there are at least $x$ people in the group, we then have\
+\par Assume there are at least $x$ people in the group, we then have
 	\begin{align*}
 		x &\equiv 1 \mod 3 \\
 		x &\equiv 2 \mod 4 \\
@@ -178,7 +185,7 @@
 			\begin{align*}
 				x &\equiv 238 \mod \mbox{Lowest\_common\_multiple} (3, 4 , 5) \\
 				&\equiv 58 \mod 60 \\
-				&\equiv 118 \mod 60 \\
+				&\equiv 118 \mod 60
 			\end{align*}
 	\end{itemize}
 \par So the two smallest possible number of people in the group are $58$ and $118$.

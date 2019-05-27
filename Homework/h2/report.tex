@@ -118,5 +118,35 @@
 \end{enumerate}
 
 \section*{Ex. 3 - CRT}
+\par Assume there are at least $x$ people in the group, we then have\
+	\begin{align*}
+		x &\equiv 1 \mod 3 \\
+		x &\equiv 2 \mod 4 \\
+		x &\equiv 3 \mod 5
+	\end{align*}
+\par To solve $x$, we need to apply the Chinese remainder theorem
+	\begin{itemize}
+		\item Step 1:
+			\begin{align*}
+				&\mbox{Common\_multiple}(3, 4) \equiv 36 \equiv 1 \mod 5 \\
+				&\mbox{Common\_multiple}(4, 5) \equiv 40 \equiv 1 \mod 3 \\
+				&\mbox{Common\_multiple}(5, 3) \equiv 45 \equiv 1 \mod 4 \\
+			\end{align*}
+			
+		\item Step 2:
+			\begin{align*}
+				36 \times 3 &= 108 \\
+				40 \times 1 &= 40 \\
+				45 \times 2 &= 90 \\
+				108 + 40 + 90 &= 238
+			\end{align*}
+			
+		\item Step 3:
+			\begin{align*}
+				x &\equiv 238 \mod \mbox{Lowest\_common\_multiple} (3, 4 , 5) \\
+				&\equiv 58 \mod 60
+			\end{align*}
+	\end{itemize}
+\par So the two smallest possible number of people in the group are $58$ and $118$.
 
 \end{document}

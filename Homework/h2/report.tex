@@ -153,7 +153,13 @@
 		\begin{align*}
 			c &= m^{2} \mod n
 		\end{align*}
-	\par And for most of the ciphertexts, there are four possible plaintexts could lead to the same ciphertext.
+	\par And for most of the ciphertexts, there are exactly four possible plaintexts could lead to the same ciphertext.
+	\par To efficiently decrypt the ciphertext, the private key is necessary. We can use the Chinese remainder theorem to solve for $m$. We have to calculate the square roots
+		\begin{align*}
+			m_{p} &= \sqrt{c} \mod p \\
+			m_{q} &= \sqrt{c} \mod q
+		\end{align*}
+	\par By applying the extended Euclidean algorithm, we can find $y_{p}$ and $y_{q}$ such that $y_{p}\cdot p + y_{q}\cdot q = 1$. Then 
 
 \end{enumerate}
 

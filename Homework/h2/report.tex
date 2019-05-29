@@ -177,7 +177,9 @@
     \begin{enumerate}[a)]
         \item As explained, there are at most $4$ possible results of $m = \sqrt{x} \mod n$, then the probability of getting a meaningful message is at least $25\%$. So within few trials, the probability of getting this message is fairly high.
 
-        \item
+        \item It won't be easy for Eve to break the ciphertext. After getting the ciphertext $x$ and the public key $n$, she directly solve $m = \sqrt{x} \mod n$ or factorized $n$ to get $p$ and $q$. However, there's no effective way to solve $m = \sqrt{x} \mod n$ or solving the factorization of $n$ which is the product of two large prime number.
+
+        \item She can use CCA,
     \end{enumerate}
 
 \end{enumerate}

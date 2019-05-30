@@ -180,7 +180,7 @@
 
         \item It won't be easy for Eve to break the ciphertext. After getting the ciphertext $x$ and the public key $n$, she directly solve $m = \sqrt{x} \mod n$ or factorized $n$ to get $p$ and $q$. However, there's no effective way to solve $m = \sqrt{x} \mod n$ or solving the factorization of $n$ which is the product of two large prime number.
 
-        \item She can use CCA,
+        \item She can use Chosen Ciphertext Attack (CCA). Since she has stolen the device, she can get the four outputs of an arbitrary input $x$. And based on the public key $n$, she can determined the $r$, $-r$, $s$, and $-s$. Then $\gcd(r-s, n)$ is a factor of $n$. Then she can find $p$ and $q$.
     \end{enumerate}
 
 \end{enumerate}

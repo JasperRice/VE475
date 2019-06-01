@@ -56,84 +56,21 @@
 
 \section*{Ex. 1 - Finite fields}
 \begin{enumerate}
-	\item 
+	\item Assume $X^{2} + 1$ is reducible in $\mathbb{F}_{3}[X]$, then the possible factors of $X^{2} + 1$ are $X$, $X + 1$, and $X + 2$.
+		\begin{align*}
+			X \cdot X &= X^{2} \neq X^{2} + 1 \\
+			X \cdot (X + 1) &= X^{2} + X \neq X^{2} + 1 \\
+			X \cdot (X + 2) &= X^{2} + 2X \neq X^{2} + 1 \\
+			(X + 1) \cdot (X + 1) &= X^{2} + 2X + 1 \neq X^{2} + 1 \\
+			(X + 1) \cdot (X + 2) &= X^{2} + 3X + 2 \neq X^{2} + 1 \\
+			(X + 2) \cdot (X + 2) &= X^{2} + 4X + 4 \neq X^{2} + 1
+		\end{align*}
+	\par So, $X^{2} + 1$ is irreducible in $\mathbb{F}_{3}[X]$.
 
 	\item 
 	
 	\item 
 \end{enumerate}
 
-
-\section*{Ex. 2 - Rabin cryptosystem}
-\begin{enumerate}
-	\item The Rabin cryptosystem uses a private key and a public key at the same time. The system works as followed.
-	\par First, choose two large different primes $p$ and $q$. The primes $p$ and $q$ are the private key and let $n = pq$ be the public key. The public key is used in the encryption while the private key is required in the decryption.
-	\par Then in the encryption part, let $m \in \{ 0, \cdots, n-1 \}$ be the plaintext. And the ciphertext $c$ is determined by
-		\begin{align*}
-			c &= m^{2} \mod n
-		\end{align*}
-	\par And for most of the ciphertexts, there are exactly four possible plaintexts could lead to the same ciphertext.
-	\par To efficiently decrypt the ciphertext, the private key is necessary. We can use the Chinese remainder theorem to solve for $m$. We have to calculate the square roots (will be explained)
-		\begin{align*}
-			m_{p} &= \sqrt{c} \mod p \\
-			m_{q} &= \sqrt{c} \mod q
-		\end{align*}
-	\par After get the value of $m_{p}$ and $m_{q}$, we then apply the extended Euclidean algorithm to find $y_{p}$ and $y_{q}$ such that $y_{p}\cdot p + y_{q}\cdot q = 1$. Then by using the Chinese remainder theorem, the four square roots $r$, $-r$, $s$, and $-s$ can be calculated
-        \begin{align*}
-            r &= (y_{p} \cdot p \cdot m_{q} + y_{q} \cdot q \cdot m_{p}) \mod n \\
-            -r &= n - r \\
-            s &= (y_{p} \cdot p \cdot m_{q} - y_{q} \cdot q \cdot m_{p}) \mod n \\
-            -s &= n - s
-        \end{align*}
-    \par Then $m \in \{ r, -r, s, -s \}$.
-    \par To simplify the computation of $m_{p} = \sqrt{c} \mod p$ and $m_{q} = \sqrt{c} \mod q$, we can choose $p \equiv q \equiv 3 \mod 4$ and get square roots by calculating
-        \begin{align*}
-            m_{p} &= c^{\frac{1}{4}(p+1)} \mod p \\
-            m_{q} &= c^{\frac{1}{4}(q+1)} \mod q
-        \end{align*}
-
-    \item
-    \begin{enumerate}[a)]
-        \item As explained, there are at most $4$ possible results of $m = \sqrt{x} \mod n$, then the probability of getting a meaningful message is at least $25\%$. So within few trials, the probability of getting this message is fairly high.
-
-        \item It won't be easy for Eve to break the ciphertext. After getting the ciphertext $x$ and the public key $n$, she directly solve $m = \sqrt{x} \mod n$ or factorized $n$ to get $p$ and $q$. However, there's no effective way to solve $m = \sqrt{x} \mod n$ or solving the factorization of $n$ which is the product of two large prime number.
-
-        \item She can use Chosen Ciphertext Attack (CCA). Since she has stolen the device, she can get the four outputs of an arbitrary input $x$. And based on the public key $n$, she can determined the $r$, $-r$, $s$, and $-s$. Then $\gcd(r-s, n)$ is a factor of $n$. Then she can find $p$ and $q$.
-    \end{enumerate}
-
-\end{enumerate}
-
-\section*{Ex. 3 - CRT}
-\par Assume there are at least $x$ people in the group, we then have
-	\begin{align*}
-		x &\equiv 1 \mod 3 \\
-		x &\equiv 2 \mod 4 \\
-		x &\equiv 3 \mod 5
-	\end{align*}
-\par To solve $x$, we need to apply the Chinese remainder theorem
-	\begin{itemize}
-		\item Step 1:
-			\begin{align*}
-				&\mbox{Common\_multiple}(4, 5) \equiv 40 \equiv 1 \mod 3 \\
-				&\mbox{Common\_multiple}(5, 3) \equiv 45 \equiv 1 \mod 4 \\
-				&\mbox{Common\_multiple}(3, 4) \equiv 36 \equiv 1 \mod 5
-			\end{align*}
-
-		\item Step 2:
-			\begin{align*}
-				40 \times 1 &= 40 \\
-				45 \times 2 &= 90 \\
-				36 \times 3 &= 108 \\
-				40 + 90 + 108 &= 238
-			\end{align*}
-
-		\item Step 3:
-			\begin{align*}
-				x &\equiv 238 \mod \mbox{Lowest\_common\_multiple} (3, 4 , 5) \\
-				&\equiv 58 \mod 60 \\
-				&\equiv 118 \mod 60
-			\end{align*}
-	\end{itemize}
-\par So the two smallest possible number of people in the group are $58$ and $118$.
 
 \end{document}

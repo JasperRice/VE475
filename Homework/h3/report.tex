@@ -56,7 +56,7 @@
 
 \section*{Ex. 1 - Finite fields}
 \begin{enumerate}
-	\item Assume $X^{2} + 1$ is reducible in $\mathbb{F}_{3}[X]$, then the possible factors of $X^{2} + 1$ are $X$, $X + 1$, and $X + 2$.
+	\item Assume $X^{2} + 1$ is reducible in $\mathbb{F}_{3}[X]$, then $X^{2} + 1$ can be written as the product of two polynomials of lower degree. The possible factors of $X^{2} + 1$ are $X$, $X + 1$, and $X + 2$.
 		\begin{align*}
 			X \cdot X &= X^{2} \neq X^{2} + 1 \\
 			X \cdot (X + 1) &= X^{2} + X \neq X^{2} + 1 \\
@@ -67,10 +67,101 @@
 		\end{align*}
 	\par So, $X^{2} + 1$ is irreducible in $\mathbb{F}_{3}[X]$.
 
-	\item 
+	\item Since $X^{2} + 1$ is irreducible in $\mathbb{F}_{3}[X]$ and $1 + 2X$ is a polynomial in $\mathbb{F}_{3}[X]$, there exists a polynomial $B(X)$ such that
+		\begin{align*}
+			(1 + 2X) \cdot B(X) \equiv 1 \mod (X^{2} + 1)
+		\end{align*}
+	\par So, $B(X)$ is the multiplicative inverse of $1 + 2X \mod X^{2} + 1$ in $F_{3}[X]$.
 	
-	\item 
+	\item Using the extended Euclidean algorithm.
+	\par Initially, $r_{0}=X^{2}+1$, $r_{1}=2X+1$, $s_{0} = 0$, $s_{1} = 1$, $t_{0} = 1$, and $t_{1} = 0$.
+		\begin{table}[!ht]
+			\centering
+			\begin{tabular}{lll|llll}
+					$q$ & $r_{0}$ & $r_{1}$ & $s_{0}$ & $s_{1}$ & $t_{0}$ & $t_{1}$ \\
+					\hline
+					$0$ & $2X+1$ & $X^{2}+1$ & $1$ & $0$ & $0$ & $1$ \\
+					$2X$ & $X+1$ & $2X+1$ & $X$ & $1$ & $1$ & $0$ \\
+					$2$ & $2$ & $X+1$ & $X+1$ & $X$ & $1$ & $1$ \\
+					$2X$ & $1$ & $2$ & $X^{2}+2X$ & $X+1$ & $X+1$ & $1$ \\
+					$2$ & $0$ & $1$ & $X^{2}+1$ & $X^{2}+2X$ & $X+2$ & $X+1$
+			\end{tabular}
+		\end{table}
+	\par So, the multiplicative inverse of $1+2X \mod X^{2}+1$ in $\mathbb{F}_{3}[X]$ is $X^{2}+2X$.
 \end{enumerate}
 
+\section*{Ex. 2 - AES}
+\begin{enumerate}
+	\item
+	\begin{enumerate}[(a)]
+		\item $\mathit{InvShiftRows}$ should be described as: cyclically shift to the right row $i$ by offset $i$, $0 \leq i \leq 3$.
+		
+		\item Since in the $\mathit{AddRoundKey}$ layer, each byte of the state is combined with a byte from the round key using the $\mathrm{XOR}$ operation ($\oplus$). Also, since $(a\oplus k)\oplus k = a$, where $a\in \{0, 1\}$, and $k\in \{0, 1\}$, the inverse of the layer $\mathit{AddRoundKey}$ is just applying $\mathit{AddRoundKey}$ again.
+		
+		\item In $\mathit{MixColumns}$ layer, we have $B = C(X) \times A$, where $B$ is the output matrix and $A$ is the state matrix. So the transformation $\mathit{InvMixColumns}$ is given by $C^{-1}(X) \times C(X) \times A = A = C^{-1}(X) \times B$. We then need to verify if the result of the multiplication of the two matrices is an identity matrix or not.
+		\begin{align*}
+			& \begin{pmatrix}
+				00001110 & 00001011 & 00001101 & 00001001 \\
+				00001001 & 00001110 & 00001011 & 00001101 \\
+				00001101 & 00001001 & 00001110 &  00001011 \\
+				00001011 & 00001101 & 00001001 & 00001110
+			\end{pmatrix} \\
+			\times &
+			\begin{pmatrix}
+				00000010 & 00000011 & 00000001 & 00000001 \\
+				00000001 & 00000010 & 00000011 & 00000001 \\
+				00000001 & 00000001 & 00000010 & 00000011 \\
+				00000011 & 00000001 & 00000001 & 00000010
+			\end{pmatrix} \\
+			= &
+			\begin{pmatrix}
+				0E & 0B & 0D & 09 \\
+				09 & 0E & 0B & 0D \\
+				0D & 09 & 0E & 0B \\
+				0B & 0D & 09 & 0E
+			\end{pmatrix}
+			\times
+			\begin{pmatrix}
+				02 & 03 & 01 & 01 \\
+				01 & 02 & 03 & 01 \\
+				01 & 01 & 02 & 03 \\
+				03 & 01 & 01 & 02
+			\end{pmatrix}			
+		\end{align*}
+	\end{enumerate}
+	
+	\item
+	
+	\item
+	
+	\item
+	\begin{enumerate}[(a)]
+		\item
+		
+		\item
+		
+		\item
+		
+		\item
+		
+	\end{enumerate}
+	
+	\item
+	
+	\item
+	 
+\end{enumerate}
 
+\section*{Ex. 3 - DES}
+\begin{enumerate}
+	\item
+	
+	\item
+	
+	\item
+	
+	\item
+\end{enumerate}
+
+\section*{Ex. 4 - Programming}
 \end{document}

@@ -58,14 +58,14 @@
 \begin{enumerate}
 	\item Assume $X^{2} + 1$ is reducible in $\mathbb{F}_{3}[X]$, then $X^{2} + 1$ can be written as the product of two polynomials of lower degree. The possible factors of $X^{2} + 1$ are $X$, $X + 1$, and $X + 2$.
 		\begin{align*}
-			X \cdot X &= X^{2} \neq X^{2} + 1 \\
-			X \cdot (X + 1) &= X^{2} + X \neq X^{2} + 1 \\
-			X \cdot (X + 2) &= X^{2} + 2X \neq X^{2} + 1 \\
-			(X + 1) \cdot (X + 1) &= X^{2} + 2X + 1 \neq X^{2} + 1 \\
-			(X + 1) \cdot (X + 2) &= X^{2} + 3X + 2 \neq X^{2} + 1 \\
-			(X + 2) \cdot (X + 2) &= X^{2} + 4X + 4 \neq X^{2} + 1
+			X \cdot X &= X^{2}\\
+			X \cdot (X + 1) &= X^{2} + X \\
+			X \cdot (X + 2) &= X^{2} + 2X \\
+			(X + 1) \cdot (X + 1) &= X^{2} + 2X + 1 \\
+			(X + 1) \cdot (X + 2) &= X^{2} + 2 \\
+			(X + 2) \cdot (X + 2) &= X^{2} + X + 1
 		\end{align*}
-	\par So, $X^{2} + 1$ is irreducible in $\mathbb{F}_{3}[X]$.
+	\par Since none of them is equal to $X^{2} + 1$, it is irreducible in $\mathbb{F}_{3}[X]$.
 
 	\item Since $X^{2} + 1$ is irreducible in $\mathbb{F}_{3}[X]$ and $1 + 2X$ is a polynomial in $\mathbb{F}_{3}[X]$, there exists a polynomial $B(X)$ such that
 		\begin{align*}
@@ -87,7 +87,7 @@
 					$2$ & $0$ & $1$ & $X^{2}+1$ & $X^{2}+2X$ & $X+2$ & $X+1$
 			\end{tabular}
 		\end{table}
-	\par So, the multiplicative inverse of $1+2X \mod X^{2}+1$ in $\mathbb{F}_{3}[X]$ is $X^{2}+2X$.
+	\par So, the multiplicative inverse of $1+2X \mod X^{2}+1$ in $\mathbb{F}_{3}[X]$ is $X^{2}+2X = 2+2X$.
 \end{enumerate}
 
 \section*{Ex. 2 - AES}
@@ -115,22 +115,25 @@
 			\end{pmatrix} \\
 			= &
 			\begin{pmatrix}
-				0E & 0B & 0D & 09 \\
-				09 & 0E & 0B & 0D \\
-				0D & 09 & 0E & 0B \\
-				0B & 0D & 09 & 0E
+				1 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1
 			\end{pmatrix}
-			\times
-			\begin{pmatrix}
-				02 & 03 & 01 & 01 \\
-				01 & 02 & 03 & 01 \\
-				01 & 01 & 02 & 03 \\
-				03 & 01 & 01 & 02
-			\end{pmatrix}			
+			= I
 		\end{align*}
+		\par The detailed calculation, take the element of first row and first column as the example, is 
+		\begin{align*}
+			I_{0, 0} =& (00001110 \times 00000010) \oplus (00001011 \times 00000001) \oplus \\
+			& (00001101 \times 00000001) \oplus (00001001 \times 00000011) \\
+			=& 00011100 \oplus 00001011 \oplus 00001101 \oplus (00010010 \oplus 00001001) \\
+			=& 00011100 \oplus 00001011 \oplus 00001101 \oplus 00011011 \\
+			=& 1
+		\end{align*}
+		\par So, the matrix is the inverse matrix of $C(X)$, and the transformation $\mathit{InvMixColumns}$ is given by multiplication by the matrix.
 	\end{enumerate}
 	
-	\item
+	\item First, generate a round key according to the original $128$ bits key. Then
 	
 	\item
 	

@@ -133,17 +133,22 @@
 		\par So, the matrix is the inverse matrix of $C(X)$, and the transformation $\mathit{InvMixColumns}$ is given by multiplication by the matrix.
 	\end{enumerate}
 	
-	\item First, generate a round key according to the original $128$ bits key. Then
+	\item In the first round, generate a round key according to the original $128$ bits key. Then, apply the $\mathit{AddRoundKey}$ layer with columns $K(40),\cdots,K(43)$. And then apply $\mathit{InvShiftRows}$ and $\mathit{InvSubBytes}$ layers sequentially.
+	\par In each round of the second to tenth rounds, sequentially apply layer $\mathit{AddRoundKey}$, $\mathit{InvMixColumns}$, $\mathit{InvShiftRows}$, and $\mathit{InvSubBytes}$. The columns used in $\mathit{AddRoundKey}$ layer in round $i$, where $i\in [2,10]$, are $K(4(11-i)),\cdots,K(4(11-i)+3)$.
+	\par In the last step, apply $\mathit{AddRoundKey}$ layer with columns $K_{0},\cdots,K_{3}$.
 	
-	\item
-	
+	\item Because $\mathit{InvShiftRows}$ and $\mathit{InvSubBytes}$ apply changes on each element ``independently'' and ``linearly'': $\mathit{InvShiftRows}$ only shift the order of the elements but not changing the values; $\mathit{InvSubBytes}$ map the state value to the combination of row and column numbers. So the order of applying these two layers won't matter the result, thus can be applied on reverse order.
+
 	\item
 	\begin{enumerate}[(a)]
-		\item
+		\item Since $\mathit{AddRoundKey}$ apply operation element-wise while $\mathit{InvMixColumns}$ apply operation on the whole matrix, meaning they are using totally different methods and cannot be viewed as ``linear''. So, reversing the order of application of $\mathit{AddRoundKey}$ and $\mathit{InvMixColumns}$ would give different results.
 		
-		\item
+		\item The result of applying first $\mathit{MixColumns}$ and then $\mathit{AddRoundKey}$ is
+		\begin{align*}
+			(a_{i,j}) \longrightarrow [(m_{i,j})(a_{i,j})] \oplus (k_{i,j})
+		\end{align*}
 		
-		\item
+		\item 
 		
 		\item
 		

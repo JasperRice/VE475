@@ -1,34 +1,18 @@
 #ifndef AES_H
 #define AES_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define AES_ENCRYPT 1
+#define AES_DECRYPT 0
 
-class AES {
-private:
-	unsigned char SBox[256];
-	unsigned char InvSBox[256];
-	void GenerateSBox(unsigned char SBox[], unsigned char InvSBox[]);
-	void SubBytes(unsigned char state[][4]);
-	void InvSubBytes(unsigned char state[][4]);
+struct aes_context {
+	int nr;				  /*!<  number of rounds  */
+	unsigned int *rk;	 /*!<  AES round keys    */
+	unsigned int buf[68]; /*!<  unaligned data    */
+};
 
-    void ShiftRows(unsigned char state[][4]);
-    void InvShiftRows(unsigned char state[][4]);
-
-    unsigned char Multiplication(unsigned char a, unsigned char b);
-    void MixColumns(unsigned char state[][4]);
-    void InvMixColumns(unsigned char state[][4]);
-
-    unsigned char rKey[11][4][4];
-	void GenerateRoundKey(unsigned char *key, unsigned char rKey[][4][4]);
-	void AddRoundKey(unsigned char state[][4], unsigned char k[][4]);
-	
-public:
-	AES(unsigned char *key);
-	virtual ~AES();
-	unsigned char *Encrypt(unsigned char *input);
-	unsigned char *Decrypt(unsigned char *input);
-}
+void aes_setkey_enc(aes_context *ctx, const unsigned char *key, int keysize);
+void aes_setkey_dec(aes_context *ctx, const unsigned char *key, int keysize);
+void aes_crypt_ecb_update(aes_context *ctx, int mode, const unsigned char input[16], unsigned char output[16]);
+unsigned char *aes_crypt_ecb(aes_context *ctx, int mode, const unsigned char *input, int slen, int *dlen);
 
 #endif

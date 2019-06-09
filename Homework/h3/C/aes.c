@@ -46,17 +46,16 @@ AES::AES(unsigned char* key) {
 
 AES::~AES() { }
 
-unsigned char* AES::Encrypt(unsigned char* input) {
+unsigned char *AES::Encrypt(unsigned char *input) {
 	unsigned char state[4][4];
-	int round, r, c;
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = input[4*c+r];
 		}
 	}
 	
 	AddRoundKey(state, rKey[0]);
-	for(round=1; round<10; round++) {
+	for (int r o und= 1 ; round<10; round++) {
 		SubBytes(state);
 		ShiftRows(state);
 		MixColumns(state);
@@ -66,25 +65,24 @@ unsigned char* AES::Encrypt(unsigned char* input) {
 	ShiftRows(state);
 	AddRoundKey(state, rKey[10]);
 	
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			input[4*c+r] = state[r][c];
 		}
 	}
 	return input;
 }
 
-unsigned char* AES::Decrypt(unsigned char* input) {
+unsigned char *AES::Decrypt(unsigned char *input) {
 	unsigned char state[4][4];
-	int round, r, c;
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = input[4*c+r];
 		}
 	}
 	
 	AddRoundKey(state, rKey[10]);
-	for(round=9; round>0; round--) {
+	for (int round = 9; round > 0; round--) {
 		InvSubBytes(state);
 		InvShiftRows(state);
 		AddRoundKey(state, rKey[round]);
@@ -94,8 +92,8 @@ unsigned char* AES::Decrypt(unsigned char* input) {
 	InvShiftRows(state);
 	AddRoundKey(state, rKey[0]);
 	
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			input[4*c+r] = state[r][c];
 		}
 	}
@@ -106,17 +104,15 @@ unsigned char* AES::Decrypt(unsigned char* input) {
 void AES::GenerateSBox() {
 }
 void AES::SubBytes(unsigned char state[][4]) {
-	int r, c;
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = SBox[state[r][c]];
 		}
 	}
 }
 void AES::InvSubBytes(unsigned char state[][4]) {
-	int r, c;
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = InvSBox[state[r][c]];
 		}
 	}
@@ -124,25 +120,23 @@ void AES::InvSubBytes(unsigned char state[][4]) {
 
 // ---------- ShiftRows ---------- //
 void AES::ShiftRows(unsigned char state[][4]) {
-	int r, c;
 	unsigned char t[4];
-	for(r=1; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 1; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			t[c] = state[r][(c+r)%4];
 		}
-		for(c=0; c<4; c++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = t[c];
 		}
 	}
 }
 void AES::InvShiftRows(unsigned char state[][4]) {
-	int r, c;
 	unsigned char t[4];
-	for(r=1; r<4; r++) {
-		for(c=0; c<4; c++) {
+	for (int r = 1; r < 4; r++) {
+		for (int c = 0; c < 4; c++) {
 			t[c] = state[r][(c-r+4)%4];
 		}
-		for(c=0; c<4; c++) {
+		for (int c = 0; c < 4; c++) {
 			state[r][c] = t[c];
 		}
 	}
@@ -154,25 +148,23 @@ unsigned char AES::Multiplication(unsigned char a, unsigned char b) {
 	return r;
 }
 void AES::MixColumns(unsigned char state[][4]) {
-	int r, c;
 	unsigned char t[4];
-	for(c=0; c<4; c++) {
-		for(r=0; r<4; r++) {
+	for (int c = 0; c < 4; c++) {
+		for (int r = 0; r < 4; r++) {
 			t[r] = state[r][c];
 		}
-		for(r=0; r<4; r++) {
+		for (int r = 0; r < 4; r++) {
 			state[r][c] = Multiplication(0x02, t[r]) ^ Multiplication(0x03, t[(r+1)%4]) ^ Multiplication(0x01, t[(r+2)%4]) ^ Multiplication(0x01, t[(r+3)%4]);
 		}
 	}
 }
 void AES::InvMixColumns(unsigned char state[][4]) {
-	int r, c;
 	unsigned char t[4];
-	for(c=0; c<4; c++) {
-		for(r=0; r<4; r++) {
+	for (int c = 0; c < 4; c++) {
+		for (int r = 0; r < 4; r++) {
 			t[r] = state[r][c];
 		}
-		for(r=0; r<4; r++) {
+		for (int r = 0; r < 4; r++) {
 			state[r][c] = Multiplication(0x0e, t[r]) ^ Multiplication(0x0b, t[(r+1)%4]) ^ Multiplication(0x0d, t[(r+2)%4]) ^ Multiplication(0x09, t[(r+3)%4]);
 		}
 	}
@@ -182,9 +174,8 @@ void AES::InvMixColumns(unsigned char state[][4]) {
 void AES::GenerateRoundKey(unsigned char* key) {
 }
 void AES::AddRoundKey(unsigned char state[][4], unsigned char k[][4]) {
-	int r, c;
-	for(r=0; r<4; r++) {
-		for(c=0; c<4; c++){
+	for (int r = 0; r < 4; r++) {
+		for (int c = 0; c < 4; c++){
 			state[r][c] ^= k[r][c];
 		}
 	}

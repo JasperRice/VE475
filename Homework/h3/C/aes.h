@@ -1,7 +1,6 @@
 #ifndef AES_H
 #define AES_H
 
-#include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

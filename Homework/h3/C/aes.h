@@ -10,19 +10,19 @@ class AES {
 private:
 	unsigned char SBox[256];
 	unsigned char InvSBox[256];
-	void GenerateSBox();
+	void GenerateSBox(unsigned char SBox[], unsigned char InvSBox[]);
 	void SubBytes(unsigned char state[][4]);
 	void InvSubBytes(unsigned char state[][4]);
 
     void ShiftRows(unsigned char state[][4]);
     void InvShiftRows(unsigned char state[][4]);
 
-    unsigned char Multiplication(unsigned char a, unsigned char b); // !!!!!
+    unsigned char Multiplication(unsigned char a, unsigned char b);
     void MixColumns(unsigned char state[][4]);
     void InvMixColumns(unsigned char state[][4]);
 
     unsigned char rKey[11][4][4];
-	void GenerateRoundKey(unsigned char *key, unsigned char rKey[][4][4]); // !!!!!
+	void GenerateRoundKey(unsigned char *key, unsigned char rKey[][4][4]);
 	void AddRoundKey(unsigned char state[][4], unsigned char k[][4]);
 	
 public:

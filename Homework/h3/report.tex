@@ -396,7 +396,7 @@
 	
 	\item Triple DES applies the DES cipher algorithm three times to each data block with different keys. 3DES is used instead of double DES is because 2DES is vulnerable to meet-in-the-middle attack: given a known plaintext pair $(x,y)$, such that $y = K_{2}(K_{1}(x))$, Eve can break the keys in $2^{n}$ steps, where $n$ is the length of the key length which is 58 and cannot be viewed as secure.
 	
-	\item
+	\item According to ``Hints for user passwords'': The legacy UNIX System encryption method is based on the NBS DES algorithm. User account information is saved in /etc/passwd. Secure user account information is saved in /etc/shadow. It is no longer secure to encrypt data with DES.
 \end{enumerate}
 
 \section*{Ex. 4 - Programming}

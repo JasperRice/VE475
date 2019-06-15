@@ -86,18 +86,90 @@
 
 
 \section*{Ex. 3 - Simple questions}
+\begin{enumerate}
+\item In mode ECB, each block is encrypted independently with a function $E$ and a key $k$, so corruption of one block wouldn't influence other blocks. So the number of plaintext decrypted incorrectly is one for the ECB mode.
+\par In mode CBC, after the second block, XOR operation between the previous ciphertext and the current plaintext is first done before the $E$ function and key $k$. So if one block is corrupted, the next block will also be influenced, thus the number of plaintext decrypted incorrectly is two for the CBC mode.
+
+\item Since the length of block is finite, so the $IV$ would be repeated after $2^{n}$ trials, where $n$ is the block length. The attacker then can use whatever plaintext and compare the ciphertext generated with the same $IV$ to find the pattern. In this way, the schemes are not CPA secure.
+
+\item Since $p-1 = 29-1 = 28 = 2\times2\times7$, so $q\in\{2, 7\}$.
+	\begin{itemize}
+	\item When $q=2$, we have
+	\begin{align*}
+		2^{(29-1)/2} \equiv 2^{14} \equiv 2^{4}\cdot32^{2} \equiv 2^{4}\cdot3^{2} \equiv 2^{2}\cdot7 \equiv 28 \not\equiv 1 \mod 29
+	\end{align*}
+	
+	\item When $q=7$, we have
+	\begin{align*}
+		2^{(29-1)/7} \equiv 2^{4} \equiv 16 \not\equiv 1 \mod 29
+	\end{align*}
+	\end{itemize}
+\par So, $2$ is a generator of $\mathsf{U}(\mathbb{Z}/29\mathbb{Z})$.
+
+\item Using proposition from Jacobi symbol, since $1801$ and $8191$ are odd prime positive integers, and $1801 \equiv 1 \mod 4$, we have
+\begin{align*}
+	\left(\frac{1801}{8191}\right) =& + \left(\frac{8191}{1801}\right) = + \left(\frac{987}{1801}\right) \\
+	=& + \left(\frac{1801}{987}\right) = + \left(\frac{814}{987}\right) = + \left(\frac{2\times11\times37}{3\times7\times47}\right) = + \left(\frac{2}{987}\right)\left(\frac{11}{987}\right)\left(\frac{37}{987}\right) \\
+	=& + \left(\frac{987}{11}\right)\left(\frac{987}{37}\right) = + \left(\frac{8}{11}\right)\left(\frac{25}{37}\right) = + \left(\frac{2^{3}}{11}\right)\left(\frac{5^{2}}{37}\right) = + \left(\frac{2}{11}\right)^{3}\left(\frac{5}{37}\right)^{2} \\
+	=& - \left(\frac{37}{5}\right)^{2} = - \left(\frac{2}{5}\right) = -1
+\end{align*}
+
+\item If $\left(\frac{b^{2}-4ac}{p}\right) = 0$, meaning $b^{2}-4ac = 0$, then the equation have one solution $x = -\frac{b}{2a}$ (more technically speaking, two same solutions). Since $-\frac{b}{2a}$ can always mod $p$, it's true that the number of solutions is $1 + \left(\frac{b^{2}-4ac}{p}\right) = 1$.
+\par If $\left(\frac{b^{2}-4ac}{p}\right) \neq 0$, meaning $b^{2}-4ac \neq 0$, then the equation have two different solutions $x_{1} = \frac{-b+\sqrt{b^{2}-4ac}}{2a}$ and $x_{2} = \frac{-b-\sqrt{b^{2}-4ac}}{2a}$. So we would have
+\begin{align*}
+	\frac{-b\pm\sqrt{b^{2}- 4ac}}{2a} \equiv& x \mod p \\
+	\sqrt{b^{2}-4ac} \equiv& \pm(2ax+b) \mod p
+\end{align*}
+\par Then, if $\left(\frac{b^{2}-4ac}{p}\right) = 1$, meaning $b^{2}-4ac$ is a square mod $p$, then it's true that the number of solutions mod $p$ is $1+\left(\frac{b^{2}-4ac}{p}\right) = 2$.
+\par Otherwise, if $\left(\frac{b^{2}-4ac}{p}\right) = -1$, meaning $b^{2}-4ac$ is not a square mod $p$, it's true that the number of solutions mod $p$ is $1+\left(\frac{b^{2}-4ac}{p}\right) = 0$.
+
+\item Since $\gcd(n, pq) = 1$, we have $\gcd(n,p) = 1$ and $\gcd(n,q) = 1$. Also, since $q-1$ divides $p-1$, we have $(p-1) = k(q-1)$, where $k$ is a positive integer. So, according to Euler's theorem, we have
+\begin{align*}
+	n^{p-1} \equiv& 1 \mod p \\
+	(n^{q-1})^{k} \equiv n^{p-1} \equiv& 1 \mod q
+\end{align*}
+\par Since $\gcd(n^{p-1}, p) = 1$ and $\gcd(n^{p-1}, q) = 1$, we can conclude that $\gcd(n^{p-1}, pq) = 1$, which is
+\begin{align*}
+	n^{p-1} \equiv 1 \mod pq
+\end{align*}
+
+\item \begin{itemize}
+\item Sufficiency: if $p \equiv 1 \mod 3$, then we can obtain
+\begin{align*}
+	\left(\frac{p}{3}\right) = 1
+\end{align*}
+\par Also, note that $p$ is an odd prime. If $p \equiv 1 \mod 4$
+\begin{align*}
+	\left(\frac{-3}{p}\right) =& \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = 1 \cdot 1 = 1
+\end{align*}
+\par If $p \equiv 3 \mod 4$
+\begin{align*}
+	\left(\frac{-3}{p}\right) =& \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = (-1) \cdot (-1) = 1
+\end{align*}
+
+\item Necessity: We already known $\left(\frac{-3}{p}\right) = \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = 1$, since $p$ is an odd prime, $p \equiv 1 \mod 4$ or $p \equiv 3 \mod 4$.
+\par If $p \equiv 1 \mod 4$, $\left(\frac{-1}{p}\right) = 1$, thus $\left(\frac{3}{p}\right) = \left(\frac{p}{3}\right) = 1$.
+\par If $p \equiv 3 \mod 4$, $\left(\frac{-1}{p}\right) = -1$, thus $\left(\frac{3}{p}\right) = -\left(\frac{p}{3}\right) = -1$.
+\par So, in both case $\left(\frac{p}{3}\right) = 1$, which gives $p^{(3-1)/2} \equiv p \equiv 1 \mod 3$.
+\end{itemize}
+
+\item If $\left(\frac{a}{p}\right) = 1$, we would have $a^{(p-1)/2} \equiv 1 \mod p$. However $2$ is a prime factor of $p-1$, meaning $2 \vert (p-1)$. So conflict with the requirement to be a generator, thus $a$ is not a generator of $\mathbb{F}_{p}^{*}$.
+\end{enumerate}
 
 
 \section*{Ex. 4 - Prime vs. irreducible}
+\begin{enumerate}
+\item 
+\end{enumerate}
 
 
 \section*{Ex. 5 - Primitive root mod 65537}
 \begin{enumerate}
 \item Using proposition of Jacobi symbol, since $65537 \equiv 1 \mod 4$ and $\gcd(3, 65537) = 1$, we have
 \begin{align*}
-	\left(\frac{3}{65537}\right) =& +\left(\frac{65537}{3}\right) \\
-	=& +\left(\frac{2}{3}\right) \\
-	=& -1
+	\left(\frac{3}{65537}\right) =& + \left(\frac{65537}{3}\right) \\
+	=& + \left(\frac{2}{3}\right) \\
+	=& - 1
 \end{align*}
 \par Meaning $3$ is not a square mod $65537$.
 

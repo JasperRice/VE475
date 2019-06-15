@@ -82,9 +82,54 @@
 \section*{Ex. 2 - AES}
 \begin{enumerate}
 \item The key used for round $1$ is given by the columns $K(4)$, $\cdots$, $K(7)$. Also, recall that for $i \not\equiv 0 \mod 4$, $K(i) = K(i-4) \oplus K(i-1)$, and for $i \equiv 0 \mod 4$, $K(i) = K(i-4) \oplus T(K(i-1))$.
+\par For $K(4)$, we have
+\begin{align*}
+	K(4) =& K(0) \oplus T(K(3)) = \overline{T(K(3))}
+\end{align*}
+\par Then the only problem is to compute $T(K(3))$.
+\begin{itemize}
+	\item $r(4) = X^{\frac{4-4}{4}} = X^{0} \equiv  00000001 \mod P(X)$.
+	\item Cyclically top shift the elements of the column by $1$ would give the same vector.
+	\item Apply the $\mathit{SubBytes}$ layer to each byte of the column and get the column vector, which is $(00010110, 00010110, 00010110, 00010110)$.
+	\item Finally return the column vector
+	\begin{align*}
+		T(K(3)) =& (00010110 \oplus 00000001, 00010110, 00010110, 00010110) \\
+		=& (00010111, 00010110, 00010110, 00010110)
+	\end{align*}
+\end{itemize}
+\par So, in all we have
+\begin{align*}
+	T(4) =& \overline{T(K(3))} = (11101000, 11101001, 11101001, 11101001) \\
+	K(5) =& K(1) \oplus K(4) = \overline{K(4)} = (00010111, 00010110, 00010110, 00010110) \\
+	K(6) =& K(2) \oplus K(5) = \overline{K(5)} = K(4) = (11101000, 11101001, 11101001, 11101001) \\ 
+	K(7) =& K(3) \oplus K(6) = \overline{K(6)} = \overline{K(4)} = (00010111, 00010110, 00010110, 00010110)
+\end{align*}
+
+\item As shown in the above question, $K(5) = \overline{K(4)}$.
+
+\item \begin{itemize}
+\item Prove that $K(10) = \overline{K(8)}$
+\begin{align*}
+	K(10) =& K(6) \oplus K(9) \\
+	=& K(6) \oplus (K(5) \oplus K(8)) \\
+	=& K(6) \oplus K(5) \oplus K(8) \\
+	=& (11111111, 11111111, 11111111, 11111111) \oplus K(8) \\
+	=& \overline{K(8)}
+\end{align*}
+
+\item Prove that $K(11) = \overline{K(9)}$
+\begin{align*}
+	K(11) =& K(7) \oplus K(10) \\
+	=& K(7) \oplus (K(6) \oplus K(9)) \\
+	=& K(7) \oplus K(6) \oplus K(9) \\
+	=& (11111111, 11111111, 11111111, 11111111) \oplus K(9) \\
+	=& \overline{K(9)}
+\end{align*}
+\end{itemize}
 \end{enumerate}
 
 
+\newpage
 \section*{Ex. 3 - Simple questions}
 \begin{enumerate}
 \item In mode ECB, each block is encrypted independently with a function $E$ and a key $k$, so corruption of one block wouldn't influence other blocks. So the number of plaintext decrypted incorrectly is one for the ECB mode.
@@ -157,10 +202,18 @@
 \end{enumerate}
 
 
+\newpage
 \section*{Ex. 4 - Prime vs. irreducible}
 \begin{enumerate}
-\item 
+\item Assume $p$ is not irreducible and $p = a \cdot b$, where $a$ and $b$ are two non-invertible and non-zero elements and also not equal to element $1$. Assume $x = k_{1}a$ and $y = k_{2}b$, where $k_{1}, k_{2} \neq 0$, then $p \nmid (x \cdot y)$ holds. Let $a \nmid k_{2}$ and $b \nmid k_{1}$. Then $ab \nmid k_{1}a$ and $ab \nmid k_{2}b$, thus $p \nmid x$ and $p \nmid y$ which is contradictory to the definition. So any prime element is irreducible.
+
+\item Assume $p \in \mathbb{Z}$ and $p$ is an irreducible integer. If $p > 1$ and $a \vert p$, then we can assume that $p = k \cdot a$. Since $p$ is irreducible, $k > 1$ and $a > 1$ cannot both be true. Then either $a = 1$ or $k = 1$. If $k = 1$, $p = 1 \cdot a = a$. So, $a = 1$ or $a = p$ is true for any irreducible integer $p \in \mathbb{Z}$ if $p > 1$ and $a \vert p$.
+
+\item For $p \in \mathbb{Z}$, from $(**)$ we know if $p > 1$ and $a \vert p$, then $p$ is prim if $a = 1$ or $a = p$. Assume $a = p$, it's true that $a \vert (p \cdot \prod_{i} q_{i}^{e_{i}})$, where $q_{i}$ are prime. So for $(*)$, in the factors of $x$ or $y$, there must be one is $p$, which implies that $p\vert x$ or $p\vert y$.
+
+\item According to $(*)$, any prime integer is irreducible. Then, for $p$ is prime and $a \vert p$, we can assume that $a \neq 1$ and $a \neq $, which gives $1 < a < p$. But for such $a$, $a \vert p$ doesn't hold, so $(*)$ implies $(**)$. Also according to above question, we can conclude that $(*)$ and $(**)$ are equivalent for integers.
 \end{enumerate}
+
 
 
 \section*{Ex. 5 - Primitive root mod 65537}

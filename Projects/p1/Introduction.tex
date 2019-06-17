@@ -1,0 +1,67 @@
+\documentclass[11pt,a4paper]{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+% \usepackage[demo]{graphicx}
+
+% My packages
+\usepackage{algorithm, algorithmic, listings} % Code
+\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
+\usepackage{color, xcolor} % Color
+\usepackage{diagbox, tabularx} % Table
+\usepackage{enumerate} % List
+\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
+\usepackage{fancybox}
+\usepackage{verbatim}
+
+% \usepackage[font=footnotesize]{caption} % labelfont=bf
+% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\epstopdfsetup{outdir=./Figure/Converted/}
+\graphicspath{{./Figure/}}
+
+\makeatletter
+\def\input@path{{./Figure/}}
+\makeatother
+
+\pgfplotsset{compat=1.13}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newcommand{\image}[3]{
+	\begin{figure}[!ht]
+		\centering
+	    \includegraphics[width=#1\textwidth]{#2}
+		\caption{#3}
+		\label{fig:#2}
+	\end{figure}
+}
+
+\title{
+	Lattice-based Cryptography
+}
+\author{
+	Jiang, Sifan\\
+	jasperrice@sjtu.edu.cn\\
+	515370910040
+}
+
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\par A quantum computer is a computer whose operation exploits certain very special transformations of its internal state based on the laws of quantum mechanics and under very carefully controlled conditions [?????]. In theory, any particles, like atom, electron, photon, can be used for quantum computing. The reason why quantum computers can have higher computing performance than any regular computers is that one particle can be viewed as a binary $0$, a binary $1$, or a $0$ and $1$ at the same time because of ``Quantum Superposition''. In such way, the computer can conduct parallel computing very efficiently and try all the possible solutions in very short time to realize complex computation. Based on such theory, \textit{Shor} discovered the quantum factoring algorithm with time complexity $O((\log N)^{3})$, making factoring-based cryptosystems no longer secure.
+\par New cryptosystems are needed especially nowadays, companies like \textit{IBM} has developing their own quantum computers, such as \textit{IBM Q System One}. One of the possible post-quantum cryptosystem solution is lattice-based cryptography. A lattice is a set of points in $n$-dimensional space with a periodic structure , such as the one illustrated in Figure~\ref{fig:2dlattice}, which is a simple example . [?????].
+\image{0.5}{2dlattice}{A two-dimensional lattice and two possible bases.}
+
+\subsection{Lattice Problems}
+\subsubsection{Shortest Vector Problem}
+
+\subsubsection{Closet Vector Problem}
+
+\subsubsection{Shortest Independent Vectors Problem}
+
+\end{document}

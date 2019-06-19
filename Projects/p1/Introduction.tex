@@ -1,73 +1,61 @@
-\documentclass[11pt,a4paper]{article}
-% \usepackage[utf8]{inputenc}
-% \usepackage[T1]{fontenc}
-\usepackage[english]{babel}
-% \usepackage[demo]{graphicx}
-
-% My packages
-\usepackage{algorithm, algorithmic, listings} % Code
-\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
-\usepackage{color, xcolor} % Color
-\usepackage{diagbox, tabularx} % Table
-\usepackage{enumerate} % List
-\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
-\usepackage{fancybox}
-\usepackage{verbatim}
-
-% \usepackage[font=footnotesize]{caption} % labelfont=bf
-% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
-\usepackage[margin=1in]{geometry}
-\usepackage[hidelinks]{hyperref}
-\epstopdfsetup{outdir=./Figure/Converted/}
-\graphicspath{{./Figure/}}
-
-\makeatletter
-\def\input@path{{./Figure/}}
-\makeatother
-
-\pgfplotsset{compat=1.13}
-
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
-
-\newcommand{\image}[3]{
-	\begin{figure}[!ht]
-		\centering
-	    \includegraphics[width=#1\textwidth]{#2}
-		\caption{#3}
-		\label{fig:#2}
-	\end{figure}
-}
-
-\title{
-	Lattice-based Cryptography
-}
-\author{
-	Jiang, Sifan\\
-	jasperrice@sjtu.edu.cn\\
-	515370910040
-}
-
-
-\begin{document}
-\maketitle
-
 \section{Introduction}
-\par A quantum computer is a computer whose operation exploits certain very special transformations of its internal state based on the laws of quantum mechanics and under very carefully controlled conditions [\textit{\textbf{Reference here}}]. In theory, any particles, like atom, electron, photon, can be used for quantum computing. The reason why quantum computers can have higher computing performance than any regular computers is that one particle can be viewed as a binary $0$, a binary $1$, or a $0$ and $1$ at the same time because of ``Quantum Superposition''. In such way, the computer can conduct parallel computing very efficiently and try all the possible solutions in very short time to realize complex computation. Based on such theory, \textit{Shor} discovered the quantum factoring algorithm with time complexity $O((\log N)^{3})$, making factoring-based cryptosystems no longer secure.
-\par New cryptosystems are needed especially nowadays, companies like \textit{IBM} has developing their own quantum computers, such as \textit{IBM Q System One}. One of the possible post-quantum cryptosystem solution is lattice-based cryptography. A lattice is a set of points in $n$-dimensional space with a periodic structure , such as the one illustrated in Figure~\ref{fig:2dlattice}, which is a simple example shows the two-dimensional space lattice and two groups of possible, as long as vectors are independent, bases (black and grey ones) [\textit{\textbf{Reference here}}].
+\par A quantum computer is a computer whose operation exploits certain very special transformations of its internal state based on the laws of quantum mechanics and under very carefully controlled conditions \cite{Quantum}. In theory, any particles, like atom, electron, photon, can be used for quantum computing. The reason why quantum computers can have higher computing performance than any regular computers is that one particle can be viewed as a binary $0$, a binary $1$, or a $0$ and $1$ at the same time because of ``Quantum Superposition''. In such way, the computer can conduct parallel computing very efficiently and try all the possible solutions in very short time to realize complex computation. Based on such theory, \textit{Shor} discovered the quantum factoring algorithm with time complexity $O((\log N)^{3})$, making factoring-based cryptosystems no longer secure.
+\par New cryptosystems are needed especially nowadays, companies like IBM has developing their own quantum computers, such as \textit{IBM Q System One}. One of the possible post-quantum cryptosystem solution is lattice-based cryptography.
+\par Lattices have been introduced to the field of mathematics first in the 18$^{th}$ century in number theory by mathematicians such as Gauss and Lagrange. The study of lattices was advanced by Minkowski in his ``Geometry of Numbers''.
+\par In 1982, Arjen Lenstra, Hendrik Lenstra, and L\'{a}szl\'{o} Lov\'{a}sz introduced their famous ``LLL'' basis-reduction algorithm in \textit{Factoring Polynomials with Rational Coefficients} \cite{LLL}, which is used for factoring integer polynomials.
+\par In 1996, Mikl\'{o}s Ajtai issued \textit{Generating hard instances of lattice problems} and introduced ``worst-case to average-case reduction'' for lattice problems , providing a cryptographic one-way function based on worst-case hardness conjectures \cite{Ajtai}. And the Short Integer Solution problem (SIS) serve as a foundation of numerous lattice-based cryptographic protocols: For positive integer parameters $n$, $m$, and $q$, find a short non-zero solution $\mathbf{z} \in \mathbb{Z}^{m}$ to the honogeneous linear system $\mathbf{Az} = 0 \mod q$ for uniformly random $\mathbf{A} \in \mathbb{Z}_{q}^{n\times m}$ \cite{LS}. Another main problem, as the foundation, is the Learning With Errors problem.
+
+
+\subsection{General Lattices}
+\par A lattice is a set of points in $n$-dimensional space with a periodic structure , such as the one illustrated in Figure~\ref{fig:2dlattice}, which is a simple example shows the two-dimensional space lattice and two groups of possible, as long as vectors are independent, bases (black and grey ones) \cite{DO}.
 \image{0.5}{2dlattice}{A two-dimensional lattice and two possible bases.}
 \par Formally, given $n$-independent vectors $\mathbf{b}_{1}, \cdots, \mathbf{b}_{n} \in \mathbb{R}^{n}$, the lattice generated by these vectors is the set of vectors
+\begin{align}
+	\mathcal{L}(\mathbf{b}_{1}, \cdots, \mathbf{b}_{n}) = \left\lbrace \sum_{i=1}^{n} x_{i}\mathbf{b_{i}} \; : \; x_{i} \in \mathbb{Z} \right\rbrace.
+\end{align}
+The vectors $\mathbf{b}_{1}, \cdots, \mathbf{b}_{n}$ are known as a basis, denoted $\mathbf{B}$, of the lattice. For example, $\left[1, 5, -9\right]^{T}$, $\left[-2, 2, 0\right]^{T}$, and $\left[13, 1, 4\right]^{T}$ form an basis for $\mathbb{Z}^{3}$ and
 \begin{align*}
-	\mathcal{L}(\mathbf{b}_{1}, \cdots, \mathbf{b}_{n}) = \left\lbrace \sum_{i=1}^{n} x_{i}\mathbf{b_{i}} \; : \; x_{i} \in \mathbb{Z} \right\rbrace
+\mathbf{B} = \begin{bmatrix}
+1 & -2 & 13 \\
+5 & 2 & 1 \\
+-9 & 0 & 4
+\end{bmatrix}.
 \end{align*}
-The vectors $\mathbf{b}_{1}, \cdots, \mathbf{b}_{n}$ are known as a \textit{basis} of the lattice [\textit{\textbf{Reference here}}].
+\par Notice that there exists multiple lattice bases which makes lattice-based cryptography possible. Any lattice can be obtained by applying some non-singular linear transformation to the integer lattice. Also, given $\mathbf{B}_{1}$, $\mathbf{B}_{2}$ two bases for lattice $\mathcal{L}$, there exist uni-modular matrices $\mathbf{U}$ such that $\mathbf{B}_{1} = \mathbf{B}_{2}\mathbf{U}^{-1}$ \cite{DO}.
+\par Since lattice is in a periodic structure, the concept of fundamental region is used to formalize this idea. A set $\mathcal{F} \subseteq \mathbb{R}^{n}$ is a fundamental region of a lattice $\mathcal{L}$ if its translates $\mathbf{X} + \mathcal{F} = \{ \mathbf{x} + \mathbf{y} \;:\; y \in \mathcal{F} \}$, taken over all $x \in \mathcal{L}$, form a partition of $\mathbb{R}^{n}$. And the fundamental parallelepiped of a lattice basis $\mathbf{B}$ is defined as
+\begin{align}
+	\mathcal{P}(\mathbf{B}) := \mathbf{B} \cdot \left[ -\frac{1}{2}, \frac{1}{2} \right)^{n} = \left\lbrace \sum_{i=1}^{n} c_{i}\mathbf{b}_{i} \;:\; c_{i} \in \left[ -\frac{1}{2}, \frac{1}{2} \right) \right\rbrace.
+\end{align}
+\par Then, the determinant of a lattice $\mathcal{L}$, denoted $\det(\mathcal{L})$, can be defined as $\mathrm{vol}(\mathcal{F})$.
+\par Since a lattice $\mathcal{L}$ is discrete, it has two non-zero elements $\pm \mathbf{v} \in \mathcal{L}$ of minimum Euclidean distance. The exact definition of the minimum distance of a lattice $\mathcal{L}$ is defined as
+\begin{align}
+\lambda_{1}(\mathcal{L}) := \min_{\mathbf{v}\in\mathcal{L}\setminus\left\lbrace\mathbf{0}\right\rbrace} \|\mathbf{v}\|.
+\end{align}
+\par With Minkowski's First Theorem, we have for any lattice $\mathcal{L}$, we have $\lambda_{1}(\mathcal{L}) \leq \sqrt{n}\cdot\det(\mathcal{L})^{1/n}$. And using the exact formula for the volume of an $n$-dimensional ball, we can obtain a slightly tiger bound $\lambda_{1}(\mathcal{L}) \leq \sqrt{n/(2\pi e)}\cdot\det(\mathcal{L})^{1/n}$.
+
 
 \subsection{Lattice Problems}
 \subsubsection{Shortest Vector Problem}
-\par Let $\mathcal{L}(\mathbf{b}_{1}, \cdots, \mathbf{b}_{n})$ be a lattice. We denote by $\lambda_{1}(\mathcal{L}):=\min_{v\in \mathcal{L}}\|v\|$ the length of a shortest vector in $\mathcal{L}$ [\textit{\textbf{Reference here}}].
-
-\subsubsection{Closet Vector Problem}
+\par Shortest Vector Problem (SVP) is the most important lattice-based computational problem, which requires the approximate of the minimal Euclidean length of a non-zero lattice vector. The definition of Approximated Shortest Vector Problem (SVP$_{\gamma}$) is: find a vector $\mathbf{v} \in \mathcal{L}(\mathbf{B}) \setminus \{\mathbf{0}\}$ such that
+\begin{align*}
+\|\mathbf{v}\| \leq \gamma \cdot \min_{\mathbf{w} \in \mathcal{L}(\mathbf{B})\setminus\mathbf{0}}  \|\mathbf{w}\|
+\end{align*}
+\par Where $\gamma \geq$ and when $\gamma = 1$, it's a non-approximated problem. There are three common variants of SVP \cite{Peikert}:
+\begin{enumerate}
+\item Decision (GapSVP$_{\gamma}$): given a lattice basis $\mathbf{B}$ and a positive integer $d$, distinguish between the cases $\lambda_{1}(\mathcal{L}(\mathbf{B})) \leq d$ and $\lambda_{1}(\mathcal{L}(\mathbf{B})) > \gamma \cdot d$.
+\item Estimate (EstSVP$_{\gamma}$): given a lattice basis $\mathbf{B}$, compute $\lambda_{1}(\mathcal{L}(\mathbf{B}))$ up to a $\gamma$ factor, i.e., output some $d \in [\lambda_{1}(\mathcal{L}(\mathbf{B})), \gamma \cdot \lambda_{1}(\mathcal{L}(\mathbf{B}))]$.
+\item Search: with is SVP$_{\gamma}$ itself.
+\end{enumerate}
+\par To efficiently compute bounds on the minimum distance, and even find relatively short non-zero lattice vectors, Lenstra-Lenstra-Lov\'{a}sz (LLL) algorithm can be applied. It yields a polynomial-time solution to SVP$_{\gamma}$  with an approximation factor $\gamma = 2^{n-1}-2$, which is exponential in the dimension. It ``converts an arbitrary lattice into one that generates the same lattice, and which is “reduced” in the following sense''\cite{Peikert}.
 
 \subsubsection{Shortest Independent Vectors Problem}
+\par Approximated Shortest Independent Vector Problem (SIVP$_{\gamma}$) is: find $\mathbf{U}\in \mathrm{Gl}_{n}(\mathbb{Z})$ with
+\begin{align*}
+\|\mathbf{B}\mathbf{U}\| \leq \gamma \cdot \min_{\mathbf{V}\in \mathrm{Gl}_{n}(\mathbb{Z})} \|\mathbf{B}\mathbf{V}\|
+\end{align*}
 
-\end{document}
+\subsubsection{Closet Vector Problem}
+\par Approximated Closet Vector Problem (CVP$_{\gamma}$) is: for $\mathbf{t} \in \mathbb{R}^{n}$, find a lattice point $\mathbf{v}\in \mathcal{L}(\mathbf{B})$ such that
+\begin{align*}
+\| \mathbf{v} - \mathbf{t}\| \leq \gamma \cdot \min_{\mathbf{w}\in \mathcal{L}(\mathbf{B})} \|\mathbf{w} - \mathbf{t}\|
+\end{align*}

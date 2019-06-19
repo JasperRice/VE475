@@ -1,0 +1,30 @@
+\section{GGH/HNF \cite{JL}}
+Though The GGH/HNF cryptosystem, proposed by Goldreich, Goldwasser and Halevi has already been broken in practice, it's still valuable to learn it while studying lattice based cryptography.
+
+\subsection{Related Knowledge}
+For any $n \times m$ matrices $A \in \mathbb{Z}^{n \times m}$ with rank m, there exists a uni-modular matrix $U$(i.e. $\det(U)=\pm1$) such that 
+$$
+UA = H, 
+$$
+where $h_{ii}$ is positive for $1\leq i\leq m$, $h_{ij}=0$ for $j>i$, and $\left|h_{ij}\right|<h_{ii}$ for $i>j$  \cite{MSKNA}. $H$ is called the Hermite normal form  of A.
+
+\subsection{Key Generation}
+For a chosen lattice base $B$, we can calculate its Hermite Normal Form $H$ by finding a uni-modular matrix $U$(i.e. $\det(U)=\pm1$) and 
+$$H=BU.$$
+Then $B$ is the private key and $H$ is the public key.
+
+
+\subsection{Encryption}
+If the message is $m \in \mathbb{Z}^n$, then the ciphertext $c \in \mathbb{Q}^n$ is 
+$$
+c=Hm+r,
+$$
+where $r \in \mathbb{Q}^n $ is a small noise vector chosen such that the lattice vector closest to c is $Hm$.
+
+
+\subsection{Decryption}
+For the ciphertext message $c \in \mathbb{Q}^n$, the private key $B$ and the public key $H=BU$, first compute:
+$$
+B^{-1} \cdot c =B^{-1} \cdot (Hm + r) = B^{-1}BUm + B^{-1}r = Um + B^{-1}r.
+$$
+Then since r is a small noise by definition, use the babai rounding method\cite{BL}  to remove the term $B^{-1}r$. Finally get m by $$U^{-1}Um=m$$

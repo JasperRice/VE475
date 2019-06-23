@@ -52,190 +52,234 @@
 
 \begin{document}
 \maketitle
-
-\begin{tiny}
-\begin{align*}
-\frac{K_{A} K_{L} K_{i} K_{s}}{B_{m} J_{L} R_{a} s^3+J_{L} K_{b} K_{i} s^3+J_{L} J_{m} R_{a} s^4+J_{L} K_{L} R_{a} s^2+J_{m} K_{L} R_{a} s^2+K_{A} K_{L} K_{i} K_{s}+B_{m} K_{L} R_{a} s+K_{L} K_{b} K_{i} s} \\
-\frac{42000000000 \pi  K_{A}}{19530000000 s+23000000000 \pi  s+184000000 \pi  s^2+23000 \pi  s^3+69 \pi  s^4+19530 s^3+42000000000 \pi  K_{A}}
-\end{align*}
-\end{tiny}
-
-
-\section*{Ex. 1 - Euler's totient}
+\section*{Ex. 1 - RSA setup}
 \begin{enumerate}
-\item Notice that for a given prime $p$, we have $\varphi(p) = p-1$. So, positive integers $n$ that is smaller than $p^{k}$, so that $\gcd(n, p^{k}) \neq 1$, can be $1 \times p$, $2 \times p$, $3 \times p$, $\cdots$, $(p^{k-1}-1) \times p$. So the amount of possible $n$ is $p^{k-1}-1$. Also, there are $p_{k}-1$ positive integers are smaller than $p^{k}$, so for any prime $p$, $\varphi(p^{k}) = (p^{k}-1)-(p^{k-1}-1) = p^{k-1}(p-1)$.
-
-\item Since $m$ and $n$ are coprime integers, according to Chinese Remainder theorem, there exists a ring isomorphism between $\mathbb{Z}/mn\mathbb{Z}$ and $\mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$. We have $\varphi(mn)$ is the order of $\mathbb{Z}/mn\mathbb{Z}$, $\varphi(m)$ is the order of $\mathbb{Z}/m\mathbb{Z}$, and $\varphi(n)$ is the order of $\mathbb{Z}/n\mathbb{Z}$. Since an isomorphism is a bijection that preserves algebraic structures, we would have $\varphi(mn) = \varphi(m) \times \varphi(n)$.
-
-\item Assume $n = \prod_{i} p_{i}^{k_{i}}$, then applying the previous results to integer $n > 1$, we have
+\item In RSA encryption, we use
 \begin{align*}
-	\varphi(n) =& \prod_{i} \varphi(p_{i}^{k_{i}}) \\
-	=& \prod_{i} p_{i}^{k_{i}-1}(p_{i}-1) \\
-	=& \prod_{i} p_{i}^{k_{i}}(1-\frac{1}{p_{i}}) \\
-	=& n \prod_{p\vert n}(1-\frac{1}{p})
+	ed \equiv 1 &\mod \varphi(n)
 \end{align*}
-
-\item The three last digits of $7^{803}$ can be obtained by calculating $7^{803} \mod 1000$. We note that $1000 = 2^{3} \times 5^{3}$, thus $\varphi(1000) = 1000 \times (1-\frac{1}{2}) \times (1-\frac{1}{5}) = 400$ according to the previous result. So we would have
+\par Then, based on Euler's theorem, let's assume $m$ and $n$ be two coprime integers, we would have
 \begin{align*}
-	7^{803} \equiv& (7^{400})^{2}\times 7^{3} \mod 1000 \\
-	\equiv& 7^{3} \mod 1000 \\
-	\equiv& 7^{3} \mod 1000 \\
-	\equiv& 343	\mod 1000
+	c^{d} \equiv m^{ed} \equiv m^{ed \mod \varphi(n)} \equiv m &\mod n,
 \end{align*}
-\par So, the three last digits of $7^{803}$ are $343$.
+which is what expected in RSA decryption. So it is likely for $n$ to be coprime with $m$.
+
+\item Assume $k = a\varphi(n)$, where $a \in \mathbb{N}$. % Also, assume $m < n$.
+\begin{enumerate}[a)]
+\item With Euler's theorem, we have
+\begin{align*}
+	m^{k} \equiv m^{a\varphi(n)} \equiv  (m^{\varphi(n)})^{a} \equiv 1^a \equiv 1 &\mod n \\
+\end{align*}
+\par Since $n = pq$, we can have $m^{k} \equiv 1 \mod p$ and $m^{k} \equiv 1 \mod q$.
+
+\item If $\gcd(m,n) = 1$, from the result of the above question, it is obvious that $m^{k+1} \equiv m \mod p$ and $m^{k+1} \equiv m \mod q$.
+\par If $\gcd(m,n) = p$, we can have $\gcd(m/p, q) = 1$, thus $(m/p)^{\varphi(q)} \equiv 1 \mod q$.
+\begin{align*}
+	m^{k+1} &\equiv  p \left[\left(\frac{m}{p}\right)^{k+1} \mod q\right] \mod n \\
+	&\equiv p \left[\left(\frac{m}{p}\right)^{a\varphi(p)\varphi(q)+1} \mod q\right] \mod n \\
+	&\equiv p \cdot \frac{m}{p} \mod n \\
+	&\equiv m \mod n
+\end{align*}
+\par So, $m^{k} \equiv 1 \mod p$ and $m^{k} \equiv 1 \mod q$.
+\par If $\gcd(m,n) = q$, similar to the case of $\gcd(m,n) = p$, we would have  $m^{k} \equiv 1 \mod p$ and $m^{k} \equiv 1 \mod q$.
 \end{enumerate}
 
+\item \begin{enumerate}[a)]
+\item Since $ed \equiv 1 \mod \varphi(n)$, $ed = k + 1$. Then based on the previous result, we would have $m^{ed} \equiv m \mod n$ for all $m$.
 
-\newpage
-\section*{Ex. 2 - AES}
-\begin{enumerate}
-\item The key used for round $1$ is given by the columns $K(4)$, $\cdots$, $K(7)$. Also, recall that for $i \not\equiv 0 \mod 4$, $K(i) = K(i-4) \oplus K(i-1)$, and for $i \equiv 0 \mod 4$, $K(i) = K(i-4) \oplus T(K(i-1))$.
-\par For $K(4)$, we have
-\begin{align*}
-	K(4) =& K(0) \oplus T(K(3)) = \overline{T(K(3))}
-\end{align*}
-\par Then the only problem is to compute $T(K(3))$.
-\begin{itemize}
-	\item $r(4) = X^{\frac{4-4}{4}} = X^{0} \equiv  00000001 \mod P(X)$.
-	\item Cyclically top shift the elements of the column by $1$ would give the same vector.
-	\item Apply the $\mathit{SubBytes}$ layer to each byte of the column and get the column vector, which is $(00010110, 00010110, 00010110, 00010110)$.
-	\item Finally return the column vector
-	\begin{align*}
-		T(K(3)) =& (00010110 \oplus 00000001, 00010110, 00010110, 00010110) \\
-		=& (00010111, 00010110, 00010110, 00010110)
-	\end{align*}
-\end{itemize}
-\par So, in all we have
-\begin{align*}
-	T(4) =& \overline{T(K(3))} = (11101000, 11101001, 11101001, 11101001) \\
-	K(5) =& K(1) \oplus K(4) = \overline{K(4)} = (00010111, 00010110, 00010110, 00010110) \\
-	K(6) =& K(2) \oplus K(5) = \overline{K(5)} = K(4) = (11101000, 11101001, 11101001, 11101001) \\ 
-	K(7) =& K(3) \oplus K(6) = \overline{K(6)} = \overline{K(4)} = (00010111, 00010110, 00010110, 00010110)
-\end{align*}
-
-\item As shown in the above question, $K(5) = \overline{K(4)}$.
-
-\item \begin{itemize}
-\item Prove that $K(10) = \overline{K(8)}$
-\begin{align*}
-	K(10) =& K(6) \oplus K(9) \\
-	=& K(6) \oplus (K(5) \oplus K(8)) \\
-	=& K(6) \oplus K(5) \oplus K(8) \\
-	=& (11111111, 11111111, 11111111, 11111111) \oplus K(8) \\
-	=& \overline{K(8)}
-\end{align*}
-
-\item Prove that $K(11) = \overline{K(9)}$
-\begin{align*}
-	K(11) =& K(7) \oplus K(10) \\
-	=& K(7) \oplus (K(6) \oplus K(9)) \\
-	=& K(7) \oplus K(6) \oplus K(9) \\
-	=& (11111111, 11111111, 11111111, 11111111) \oplus K(9) \\
-	=& \overline{K(9)}
-\end{align*}
-\end{itemize}
+\item Based on the previous conclusion, no matter $m$ and $n$ are coprime or not, we would have $c^{d} \equiv m^{ed} \equiv m \mod n$ in decryption. So there's no need for having $\gcd(m,n) = 1$.
 \end{enumerate}
-
-
-\newpage
-\section*{Ex. 3 - Simple questions}
-\begin{enumerate}
-\item In mode ECB, each block is encrypted independently with a function $E$ and a key $k$, so corruption of one block wouldn't influence other blocks. So the number of plaintext decrypted incorrectly is one for the ECB mode.
-\par In mode CBC, after the second block, XOR operation between the previous ciphertext and the current plaintext is first done before the $E$ function and key $k$. So if one block is corrupted, the next block will also be influenced, thus the number of plaintext decrypted incorrectly is two for the CBC mode.
-
-\item Since the length of block is finite, so the $IV$ would be repeated after $2^{n}$ trials, where $n$ is the block length. The attacker then can use whatever plaintext and compare the ciphertext generated with the same $IV$ to find the pattern. In this way, the schemes are not CPA secure.
-
-\item Since $p-1 = 29-1 = 28 = 2\times2\times7$, so $q\in\{2, 7\}$.
-	\begin{itemize}
-	\item When $q=2$, we have
-	\begin{align*}
-		2^{(29-1)/2} \equiv 2^{14} \equiv 2^{4}\cdot32^{2} \equiv 2^{4}\cdot3^{2} \equiv 2^{2}\cdot7 \equiv 28 \not\equiv 1 \mod 29
-	\end{align*}
-	
-	\item When $q=7$, we have
-	\begin{align*}
-		2^{(29-1)/7} \equiv 2^{4} \equiv 16 \not\equiv 1 \mod 29
-	\end{align*}
-	\end{itemize}
-\par So, $2$ is a generator of $\mathsf{U}(\mathbb{Z}/29\mathbb{Z})$.
-
-\item Using proposition from Jacobi symbol, since $1801$ and $8191$ are odd prime positive integers, and $1801 \equiv 1 \mod 4$, we have
-\begin{align*}
-	\left(\frac{1801}{8191}\right) =& + \left(\frac{8191}{1801}\right) = + \left(\frac{987}{1801}\right) \\
-	=& + \left(\frac{1801}{987}\right) = + \left(\frac{814}{987}\right) = + \left(\frac{2\times11\times37}{3\times7\times47}\right) = + \left(\frac{2}{987}\right)\left(\frac{11}{987}\right)\left(\frac{37}{987}\right) \\
-	=& + \left(\frac{987}{11}\right)\left(\frac{987}{37}\right) = + \left(\frac{8}{11}\right)\left(\frac{25}{37}\right) = + \left(\frac{2^{3}}{11}\right)\left(\frac{5^{2}}{37}\right) = + \left(\frac{2}{11}\right)^{3}\left(\frac{5}{37}\right)^{2} \\
-	=& - \left(\frac{37}{5}\right)^{2} = - \left(\frac{2}{5}\right) = -1
-\end{align*}
-
-\item If $\left(\frac{b^{2}-4ac}{p}\right) = 0$, meaning $b^{2}-4ac = 0$, then the equation have one solution $x = -\frac{b}{2a}$ (more technically speaking, two same solutions). Since $-\frac{b}{2a}$ can always mod $p$, it's true that the number of solutions is $1 + \left(\frac{b^{2}-4ac}{p}\right) = 1$.
-\par If $\left(\frac{b^{2}-4ac}{p}\right) \neq 0$, meaning $b^{2}-4ac \neq 0$, then the equation have two different solutions $x_{1} = \frac{-b+\sqrt{b^{2}-4ac}}{2a}$ and $x_{2} = \frac{-b-\sqrt{b^{2}-4ac}}{2a}$. So we would have
-\begin{align*}
-	\frac{-b\pm\sqrt{b^{2}- 4ac}}{2a} \equiv& x \mod p \\
-	\sqrt{b^{2}-4ac} \equiv& \pm(2ax+b) \mod p
-\end{align*}
-\par Then, if $\left(\frac{b^{2}-4ac}{p}\right) = 1$, meaning $b^{2}-4ac$ is a square mod $p$, then it's true that the number of solutions mod $p$ is $1+\left(\frac{b^{2}-4ac}{p}\right) = 2$.
-\par Otherwise, if $\left(\frac{b^{2}-4ac}{p}\right) = -1$, meaning $b^{2}-4ac$ is not a square mod $p$, it's true that the number of solutions mod $p$ is $1+\left(\frac{b^{2}-4ac}{p}\right) = 0$.
-
-\item Since $\gcd(n, pq) = 1$, we have $\gcd(n,p) = 1$ and $\gcd(n,q) = 1$. Also, since $q-1$ divides $p-1$, we have $(p-1) = k(q-1)$, where $k$ is a positive integer. So, according to Euler's theorem, we have
-\begin{align*}
-	n^{p-1} \equiv& 1 \mod p \\
-	(n^{q-1})^{k} \equiv n^{p-1} \equiv& 1 \mod q
-\end{align*}
-\par Since $\gcd(n^{p-1}, p) = 1$ and $\gcd(n^{p-1}, q) = 1$, we can conclude that $\gcd(n^{p-1}, pq) = 1$, which is
-\begin{align*}
-	n^{p-1} \equiv 1 \mod pq
-\end{align*}
-
-\item \begin{itemize}
-\item Sufficiency: if $p \equiv 1 \mod 3$, then we can obtain
-\begin{align*}
-	\left(\frac{p}{3}\right) = 1
-\end{align*}
-\par Also, note that $p$ is an odd prime. If $p \equiv 1 \mod 4$
-\begin{align*}
-	\left(\frac{-3}{p}\right) =& \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = 1 \cdot 1 = 1
-\end{align*}
-\par If $p \equiv 3 \mod 4$
-\begin{align*}
-	\left(\frac{-3}{p}\right) =& \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = (-1) \cdot (-1) = 1
-\end{align*}
-
-\item Necessity: We already known $\left(\frac{-3}{p}\right) = \left(\frac{-1}{p}\right)\left(\frac{3}{p}\right) = 1$, since $p$ is an odd prime, $p \equiv 1 \mod 4$ or $p \equiv 3 \mod 4$.
-\par If $p \equiv 1 \mod 4$, $\left(\frac{-1}{p}\right) = 1$, thus $\left(\frac{3}{p}\right) = \left(\frac{p}{3}\right) = 1$.
-\par If $p \equiv 3 \mod 4$, $\left(\frac{-1}{p}\right) = -1$, thus $\left(\frac{3}{p}\right) = -\left(\frac{p}{3}\right) = -1$.
-\par So, in both case $\left(\frac{p}{3}\right) = 1$, which gives $p^{(3-1)/2} \equiv p \equiv 1 \mod 3$.
-\end{itemize}
-
-\item If $\left(\frac{a}{p}\right) = 1$, we would have $a^{(p-1)/2} \equiv 1 \mod p$. However $2$ is a prime factor of $p-1$, meaning $2 \vert (p-1)$. So conflict with the requirement to be a generator, thus $a$ is not a generator of $\mathbb{F}_{p}^{*}$.
-\end{enumerate}
-
-
-\newpage
-\section*{Ex. 4 - Prime vs. irreducible}
-\begin{enumerate}
-\item Assume $p$ is not irreducible and $p = a \cdot b$, where $a$ and $b$ are two non-invertible and non-zero elements and also not equal to element $1$. Assume $x = k_{1}a$ and $y = k_{2}b$, where $k_{1}, k_{2} \neq 0$, then $p \nmid (x \cdot y)$ holds. Let $a \nmid k_{2}$ and $b \nmid k_{1}$. Then $ab \nmid k_{1}a$ and $ab \nmid k_{2}b$, thus $p \nmid x$ and $p \nmid y$ which is contradictory to the definition. So any prime element is irreducible.
-
-\item Assume $p \in \mathbb{Z}$ and $p$ is an irreducible integer. If $p > 1$ and $a \vert p$, then we can assume that $p = k \cdot a$. Since $p$ is irreducible, $k > 1$ and $a > 1$ cannot both be true. Then either $a = 1$ or $k = 1$. If $k = 1$, $p = 1 \cdot a = a$. So, $a = 1$ or $a = p$ is true for any irreducible integer $p \in \mathbb{Z}$ if $p > 1$ and $a \vert p$.
-
-\item For $p \in \mathbb{Z}$, from $(**)$ we know if $p > 1$ and $a \vert p$, then $p$ is prim if $a = 1$ or $a = p$. Assume $a = p$, it's true that $a \vert (p \cdot \prod_{i} q_{i}^{e_{i}})$, where $q_{i}$ are prime. So for $(*)$, in the factors of $x$ or $y$, there must be one is $p$, which implies that $p\vert x$ or $p\vert y$.
-
-\item According to $(*)$, any prime integer is irreducible. Then, for $p$ is prime and $a \vert p$, we can assume that $a \neq 1$ and $a \neq $, which gives $1 < a < p$. But for such $a$, $a \vert p$ doesn't hold, so $(*)$ implies $(**)$. Also according to above question, we can conclude that $(*)$ and $(**)$ are equivalent for integers.
 \end{enumerate}
 
 
 
-\section*{Ex. 5 - Primitive root mod 65537}
+\section*{Ex. 2 - RSA decryption}
+\par We have $n = 101 \times 113$, thus $\varphi(n) = 100 \times 112 = 11200$. By applying the extended Euclidean algorithm, we can have $d = 3 = (11)_{2}$ such that $ed \equiv 1 \mod \varphi(n)$. Then the plaintext $m$ would given by calculating $c^{d} \equiv m \mod n$. We can apply modular exponentiation to find $m$.
+\begin{table}[!ht]
+	\centering
+	\begin{tabular}{l|l|l}
+		$i$ & $d_{i}$ & $power \mod 11413$ \\
+		\hline
+		$1$ & $1$ & $1^{2} \cdot 5859 \equiv 5859$ \\
+		$0$ & $1$ & $5859^{2} \cdot 5859 \equiv 1415$
+	\end{tabular}
+\end{table}
+\par So, $m = 1415$.
+
+
+
+\section*{Ex. 3 - Breaking RSA}
 \begin{enumerate}
-\item Using proposition of Jacobi symbol, since $65537 \equiv 1 \mod 4$ and $\gcd(3, 65537) = 1$, we have
+\item When $d$ is small, the calculation of $c^{d} \equiv m \mod n$ with modular exponentiation would be faster.
+
+\item Since $ed \equiv 1 \mod \varphi(n)$, we have
 \begin{align*}
-	\left(\frac{3}{65537}\right) =& + \left(\frac{65537}{3}\right) \\
-	=& + \left(\frac{2}{3}\right) \\
-	=& - 1
+	ed &= K \times \varphi(pq) + 1 \\
+	&= K \times \mathrm{lcm}(p-1, q-1) + 1
 \end{align*}
-\par Meaning $3$ is not a square mod $65537$.
+\par Define $G = \gcd(p-1,q-1)$, the we would have
+\begin{align*}
+	ed = \frac{K}{G}(p-1)(q-1) + 1
+\end{align*}
+\par Then, define $k = \frac{K}{\gcd(K,G)}$ and $g = \frac{G}{\gcd(K,G)}$, and we would have
+\begin{align*}
+	ed &= \frac{k}{g}(p-1)(q-1) + 1 \\
+	\frac{ed}{dpq} &= \frac{k}{dg}\frac{(p-1)(q-1)}{pq} + \frac{1}{dpq} \\
+	\frac{e}{pq} &= \frac{k}{dg}(1-\delta),
+\end{align*}
+where $\delta = \frac{p + q - 1 - \frac{g}{k}}{pq}$. Since $p$ and $q$ are two large primes, $\delta$ would be small, then $\frac{e}{pq}$ is slightly smaller than $\frac{k}{dg}$. Also, since $ed = \frac{k}{g}(p-1)(q-1) + 1$, let $k^{*} = \dfrac{k}{g}$ we can have
+\begin{align*}
+	(p-1)(q-1) = \varphi(n) = \frac{ed-1}{k^{*}},
+\end{align*}
+where $\dfrac{e}{n}$ is slightly smaller than $\dfrac{k^{*}}{d}$. Then continued fractions is applied on $\frac{e}{pq}$ to obtain multiple approximated $\frac{k^{*}}{d}$ validate them and get the right $d$ if the equation $x^{2} - (n-\varphi(n) + 1)x + n = 0$, where $\varphi(n) = \frac{ed - 1}{k^{*}}$, has two valid solutions which are $p$ and $q$.
 
-\item Since $65537$ is a prime integer, $\frac{65537-1}{2} = 32768$, and $3$ is not a square mod $65537$, we can conclude that $3^{32768}\not\equiv 1 \mod 65537$.
+\item According to Wiener's theorem, if $d < \frac{1}{3}n^{\frac{1}{4}}$, the attacker can efficiently recover $d$. So, $d$ should be larger than $\frac{1}{3}n^{\frac{1}{4}}$.
 
-\item First note that $p-1=65537-1 = 2^{16}$, thus $q=2$ is the only prime such that $q \vert (p-1)$. Also, since $3^{32768}\equiv \alpha^{(p-1)/q} \not\equiv 1 \mod p$, and according to the theorem, we can conclude that $\alpha = 3$ is a primitive root mod $65537$.
+\item By applying continued fractions on $\frac{e}{n}$, we have
+\begin{align*}
+	\frac{77537081}{317940011} = 0 + \frac{1}{4 + \frac{1}{9 + \frac{1}{1 + \frac{1}{19 + \cdots}}}}
+\end{align*}
+\par Then we have convergent $\frac{k^{*}}{d}$: $0, \frac{1}{4}, \frac{9}{37}, \frac{10}{41}, \frac{199}{816},\cdots$. And according to Wiener's theorem, $d < \frac{1}{3}n^{\frac{1}{4}} < 45$, we can start with $\frac{1}{4}$ and have
+\begin{align*}
+	(n - \varphi(n) + 1)^{2} - 4n &= (n - \frac{ed - 1}{k^{*}} + 1)^{2} - 4n = 60709145712677,
+\end{align*}
+which is not a square number.
+\par Then try next possible $\frac{k^{*}}{d}$, and when $\frac{k^{*}}{d} = \frac{10}{41}$, we have
+\begin{align*}
+	(n - \varphi(n) + 1)^{2} - 4n &= (n - \frac{ed - 1}{k^{*}} + 1)^{2} - 4n = 170720356 = 13066^{2},
+\end{align*}
+so $p = \frac{37980 + 13066}{2} = 25523$ and $q = \frac{37980 - 13066}{2} = 12457$, thus $n = 12457 \times 25523$.
+\end{enumerate}
+
+
+
+\section*{Ex. 5 - Simple questions}
+\begin{enumerate}
+\item 
+
+\item No, this double encryption isn't adding any security. The nature of breaking RSA is to factorize $n$, using double exponents won't make it more secure.
+
+\item Since $n = 642401$, we have
+\begin{align*}
+	4 \cdot 516107^{2} - 187722^{2} &\equiv 0 \mod n \\
+	(2 \cdot 516107 - 187722)(2 \cdot 516107 + 187722) &\equiv 0 \mod n \\
+	844492 \cdot 1219936 &\equiv 0 \mod n \\
+	(-440310) \cdot (-64866) &\equiv0 \mod n \\
+	(2 \cdot 3 \cdot 5 \cdot 13 \cdot 1129) \cdot (2 \cdot 3 \cdot 19 \cdot 569) &\equiv 0 \mod n
+\end{align*}
+\par So, we would get $n = 642401 = 569 \times 1129$.
+
+\item With three primes $p$, $q$, and $r$, $n = pqr$ and $\varphi(n) = (p-1)(q-1)(r-1)$. Find $e$ such that $\gcd(e, \varphi(n)) = 1$, and then find $d$ such that
+\begin{align*}
+	ed \equiv 1 \mod \varphi(n)
+\end{align*}
+\par Then
+\begin{align*}
+c &\equiv m^{e} \mod n \\
+m &\equiv c^{d} \equiv m^{ed} \equiv m^{\varphi(n) + 1} \mod n
+\end{align*}
+\par If the length of the public keys are same in both cases, it would result in short separate primes, making the factorization easier.
+
+\item Since $97 - 1 = 96 = 2^{5} \times 3$, then a $\alpha$ is a generator if $\alpha^{48} \not\equiv 1 \mod 97$ and $\alpha^{32} \not\equiv 1 \mod 97$. Or, since $32 = 2 \times 16$ and $48 = 3 \times 16$, we can first calculate $2$
+\begin{align*}
+	\alpha^{16} \not\equiv \pm 1, 35, 61 \mod 97
+\end{align*}
+\par We can take the numbers in consequence and have
+\begin{align*}
+	2^{16} &\equiv 61 \mod 97 \\
+	3^{16} &\equiv 61 \mod 97 \\
+	4^{16} &\equiv 1  \mod 97 \\
+	5^{16} &\equiv 36 \mod 97
+\end{align*}
+\par So, $5$ is the smallest generator of the group.
+
+\item \begin{enumerate}[a)]
+\item Since $101 - 1 = 100 = 2^{2} \times 5^{2}$, we would have
+\begin{align*}
+	2^{\frac{100}{2}} \equiv 2^{50} \equiv 100 \not\equiv \mod 101
+\end{align*}
+Also,
+\begin{align*}
+	2^{\frac{100}{5}} \equiv 2^{20} \equiv 95 \not\equiv 1 \mod 101
+\end{align*}
+\par So, $2$ is a generator of $G$.
+
+\item Since $\log_{2}2 = 1$, we would have
+\begin{align*}
+	\log_{2}24 = \log_{2}3 + 3\log_{2}2 = 69 + 3 = 72
+\end{align*}
+
+\item Since in group $G$,
+\begin{align*}
+	\log_{2}24 = \log_{2}(24 + 101) = \log_{2}(125) = 3\log_{5} = 3 \times 24 = 72
+\end{align*}
+\end{enumerate}
+
+\item Since $\gcd(3, 137) = 1$, we have $3^{\varphi(137)} \equiv 3^{136} \equiv \mod 137$. Also, notice that $44 = 2^{2} \times 11$, we would have
+\begin{align*}
+	3^{6} \equiv 3^{136 + 6} \equiv 3^{142} \equiv 44 \equiv 2^{2} \times 11 \equiv (3^{10})^{2} \times 3^{x} \mod 137
+\end{align*}
+\par So, $x = 142 - 2 \times 10 = 122$.
+
+\item \begin{enumerate}[a)]
+\item Since $6^{5} \equiv 10 \mod 11$, $6^{5}$ in $G$ is $10$.
+
+\item For $q \vert (p-1)$, $q \in \{2, 5\}$.
+\begin{align*}
+	2^{\frac{10}{2}} \equiv 10 \not\equiv 1 &\mod 11 \\
+	2^{\frac{10}{5}} \equiv 4 \not\equiv 1 &\mod 11
+\end{align*}
+\par So $2$ is a generator of $G$.
+
+\item From previous result, we have
+\begin{align*}
+	2^{5x} \equiv 10^{x} \equiv (-1)^{x} \mod 11
+\end{align*}
+\par Also,
+\begin{align*}
+	2^{5x} \equiv 6^{5} \equiv -1 \mod 11
+\end{align*}
+\par So, $(-1)^{x} = -1$, thus $x$ is odd.
+\end{enumerate}
+\end{enumerate}
+
+
+
+\section*{Ex. 6 - DLP}
+\begin{enumerate}
+\item From what we known, we can have
+\begin{align*}
+	3^{x} &\equiv 2 \mod 65537 \\
+	3^{16x} &\equiv -1 \mod 65537 \\
+	3^{32x} &\equiv 1 \mod 65537
+\end{align*}
+\par Since $3$ and $65537$ are coprime integers and $\varphi(65537) = 65536$, we would also have
+\begin{align*}
+	3^{65536} \equiv 1 \mod 65537
+\end{align*}
+\par So $65536 \vert 32x$ and $65536 \nmid 16x$, which gives that $2048$ divides $x$, while $4096$ does not.
+
+\item Let $x = (2k + 1)\cdot 2048$, where $k \in \mathbb{N}$. And there are $16$ possible choices for $k$, which are $0, 1, 2, \cdots, 15$. And when $k = 13$ ($x = 55296$), we have $3^{x} \equiv 2 \mod 65537$.
+
+\item Since $x\vert 2048$ and $x \nmid 4096$, we can apply the Pohlig-Hellman algorithm by using
+\begin{align*}
+	x = 2^{11} + a_{12}2^{12} + a_{13}2^{13} + a_{14}2^{14} + a_{15}2^{15}
+\end{align*}
+\par For $a_{12}$,
+\begin{align*}
+	\left(\frac{3^{x}}{3^{2^{11}}}\right)^{2^{15-12}} \equiv (2^{14})^8 \equiv -1 \mod 65537
+\end{align*}
+\par So, $a_{12} = 1$.
+\par For $a_{13}$,
+\begin{align*}
+	\left(\frac{3^{x}}{3^{2^{11}+2^{12}}}\right)^{2^{15-13}} \equiv (2^{8})^4 \equiv 1 \mod 65537
+\end{align*}
+\par So, $a_{13} = 0$.
+\par Similarly, we would have $a_{14} = 1$ and $a_{15} = 1$, which gives
+\begin{align*}
+	x = 2^{11} + 2^{12} + 2^{14} + 2^{15} = 55296.
+\end{align*}
+
+\item $65537$ is a prime but in the form $p^{k} + 1$. If $c^{x} \equiv p \mod p^{k} + 1$, in order to find $x$, we can find a generator of the group and since $c^{2k} \equiv p^{2k} \equiv 1 \mod p^{k} + 1$, we can find $\frac{p^{k}}{2k} \vert x$ and $\frac{p^{k}}{k} \nmid x$. Then there would only be $k$ possible choices for $x$.
 \end{enumerate}
 \end{document}

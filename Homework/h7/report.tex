@@ -1,0 +1,138 @@
+\documentclass[11pt,a4paper]{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+% \usepackage[demo]{graphicx}
+
+% My packages
+\usepackage{algorithm, algorithmic, listings} % Code
+\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
+\usepackage{color, xcolor} % Color
+\usepackage{diagbox, tabularx} % Table
+\usepackage{enumerate} % List
+\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
+\usepackage{fancybox}
+\usepackage{verbatim}
+
+% \usepackage[font=footnotesize]{caption} % labelfont=bf
+% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\epstopdfsetup{outdir=./Figure/Converted/}
+\graphicspath{{./Figure/}}
+
+\makeatletter
+\def\input@path{{./Figure/}}
+\makeatother
+
+\pgfplotsset{compat=1.13}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newcommand{\image}[3]{
+	\begin{figure}[!ht]
+		\centering
+	    \includegraphics[width=#1\textwidth]{#2}
+		\caption{#3}
+		\label{fig:#2}
+	\end{figure}
+}
+
+\title{
+	VE475 Introduction to Cryptography \\
+	Homework 7
+}
+\author{
+	Jiang, Sifan\\
+	jasperrice@sjtu.edu.cn\\
+	515370910040
+}
+
+
+\begin{document}
+\maketitle
+\section*{Homework 6}
+\subsection*{Ex. 5 - Merkle-Damg$\mathrm{\mathbf{\mathring{a}}}$rd construction}
+\begin{enumerate}
+\item \begin{enumerate}[a)]
+\item Since $f(0)=0$ and $f(1)=01$, $f(x_{i})$ is always start with $0$. So $y$ can be separated into several segments start from $0$, except for the first two digits. Those segments are injective with $x_{i}$, so the map $s$ from $x$ to $y$ is injective.
+
+\item If $z$ is empty, from what previous proved, there's no such $x'$. If $z$ is not empty, since we have $11$ at the beginning of $y_{i+1}$, so no this no such $x'$ and $z$ such that $s(x) = z \| s(x')$ .
+\end{enumerate}
+
+\item Because the previous conditions guarantee the mapping is collision resistant.
+\end{enumerate}
+
+
+
+\section*{Homework 7}
+\subsection*{Ex. 1 - Cramer-Shoup cryptosystem}
+\begin{enumerate}
+\item \textbf{Key generation:}
+	\begin{itemize}
+	\item Alice generates a cyclic group $G$ of order $q$ with two distinct generators $g_{1}$, $g_{2}$. $G$ could be $\mathsf{U}(\mathbb{Z}/p\mathbb{Z})$.
+	\item Alice chooses five random values $\left( x_{1}, x_{2}, y_{1}, y_{2}, z \right)$ from $\left\lbrace 0, 1, \cdots, q-1 \right\rbrace$.
+	\item Alice computes $c = g_{1}^{x_{1}}g_{2}^{x_{2}}$, $d = g_{1}^{y_{1}}g_{2}^{y_{2}}$, and $h = g_{1}^{z}$.
+	\item Alice publishes $\left( c, d, h \right)$ and $G$, $q$, $g_{1}$, $g_{2}$ as her public key. She retains $\left( x_{1}, x_{2}, y_{1}, y_{2}, z \right)$ as her private key.
+	\end{itemize}
+
+\par \textbf{Encryption:}
+	\begin{itemize}
+	\item Bob converts plaintext into an element $m$ in group $G$.
+	\item Bob chooses a random $k$ from $\left\lbrace 0, 1, \cdots, q-1 \right\rbrace$, then calculates:
+		\begin{itemize}
+		\item $u_{1} = g_{1}^{k}$, $u_{2} = g_{2}^{k}$.
+		\item $e = h^{k}m$.
+		\item $\alpha = H(u_{1}, u_{2}, e)$, where $H$ is a collision-resistant cryptographic hash function.
+		\item $v = c^{k}d^{k\alpha}$.
+		\end{itemize}
+	\item Bob sends the ciphertext $\left( u_{1}, u_{2}, e, v \right)$ to Alice.
+	\end{itemize}
+	
+\par \textbf{Decryption:}
+	\begin{itemize}
+		\item Alice computes $\alpha = H(u_{1}, u_{2}, e)$ and verifies that 
+	\end{itemize}
+
+\item 
+\item
+\end{enumerate}
+
+
+
+\subsection*{Ex. 2 - Simple questions}
+\begin{enumerate}
+\item
+\item
+\end{enumerate}
+
+
+
+\subsection*{Ex. 3 - Birthday paradox}
+\begin{enumerate}
+\item
+\item
+\item
+\item
+\end{enumerate}
+
+
+
+\subsection*{Ex. 4 - Birthday attack}
+\begin{enumerate}
+\item
+\item
+\item
+\end{enumerate}
+
+
+
+\subsection*{Ex. 5 - Faster multiple modular exponentiation}
+\begin{enumerate}
+\item
+\item
+\item
+\item
+\end{enumerate}
+\end{document}

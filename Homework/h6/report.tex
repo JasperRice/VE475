@@ -1,0 +1,210 @@
+\documentclass[11pt,a4paper]{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+% \usepackage[demo]{graphicx}
+
+% My packages
+\usepackage{algorithm, algorithmic, listings} % Code
+\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
+\usepackage{color, xcolor} % Color
+\usepackage{diagbox, tabularx} % Table
+\usepackage{enumerate} % List
+\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
+\usepackage{fancybox}
+\usepackage{verbatim}
+
+% \usepackage[font=footnotesize]{caption} % labelfont=bf
+% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\epstopdfsetup{outdir=./Figure/Converted/}
+\graphicspath{{./Figure/}}
+
+\makeatletter
+\def\input@path{{./Figure/}}
+\makeatother
+
+\pgfplotsset{compat=1.13}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\newcommand{\image}[3]{
+	\begin{figure}[!ht]
+		\centering
+	    \includegraphics[width=#1\textwidth]{#2}
+		\caption{#3}
+		\label{fig:#2}
+	\end{figure}
+}
+
+\title{
+	VE475 Introduction to Cryptography \\
+	Homework 6
+}
+\author{
+	Jiang, Sifan\\
+	jasperrice@sjtu.edu.cn\\
+	515370910040
+}
+
+
+\begin{document}
+\maketitle
+\section*{Ex. 1 - Application of the DLP}
+\begin{enumerate}
+\item \begin{enumerate}[a)]
+\item Bob sends $\gamma \equiv \alpha^{r} \mod p$ to Alice. If Bob replies with $b \equiv r \mod (p-1)$ or $b \equiv x + r \mod (p-1)$, then according to Fermat's little theorem, we have $\alpha^{p-1} \equiv 1 \mod p$. We would then have
+\begin{align*}
+	\alpha^{b} \equiv \alpha^{r} \equiv \gamma \mod p
+\end{align*}
+or
+\begin{align*}
+	\alpha^{b} \equiv \alpha^{x+r} \equiv \beta\gamma \mod p
+\end{align*}
+\par So, Alice can get $\gamma$ or $\beta\gamma$  and since she has got $\gamma$ and known $\beta$, she can prove Bob's identity.
+
+\item Bob cannot compute $x+r \mod (p-1)$ if he doesn't know $x$. And it would be a DLP problem to solve $\alpha^{x + r} \equiv \beta\gamma \mod p$. So, Bob can prove his identity.
+\end{enumerate}
+
+\item \begin{enumerate}[a)]
+\item $128$ times should be repeated for a $128$ bits security level.
+
+\item $256$ times should be repeated for a $256$ bits security level.
+\end{enumerate}
+
+\item It's a Digital Signature Protocol.
+\end{enumerate}
+
+
+
+\section*{Ex. 2 - Pohlig-Hellman}
+\par Assume $\alpha$ is a generator of the group. Let $x = \log_{\alpha}\beta$, let the order of the group
+\begin{align*}
+	n = \prod_{i=1}^{r} p_{i}^{e_{i}}
+\end{align*}
+where $r \in \mathbb{N}$. Then compute $\alpha_{i} = \alpha^{n/p_{i}^{e_{i}}}$ and compute $\beta_{i} = \beta^{n/p_{i}^{e_{i}}}$ in the group $G$. 
+\par Let $x_{i} = \log_{\alpha_{i}}\beta_{i}$, where $\alpha_{i} = p_{i}^{e_{i}}$ and $x_{i,0}=0$. For each $k \in \{0, \cdots, e_{i}-1\}$, calculate $\beta_{i,k} = (\alpha_{i}^{-x_{i,k}}\beta_{i})^{p_{i}^{e_{i}-1-k}}$.  Have $\gamma = \alpha_{i}^{p_{i}^{e_{i}-1}}$ and then compute $d_{k}$ such that $\gamma^{d_{k}} = \beta_{i,k}$ and let $x_{k+1} = x_{k} + p_{i}^{k}d_{k}$. And finally obtain $x_{i} = x_{i,e_{i}}$. We can then have $x_{i} = x \mod p_{i}^{e_{i}}$ for $1 \leq i \leq r$ and use Chinese remainder theorem to solve $x$.
+\par As an example, we are going to calculate $\log_{3}3344$ in $\mathbb{Z}/24389\mathbb{Z}$. Since $24389 = 29^{3}$, the order of the group is $28\cdot 29^{2} = 2^{2}\cdot 7\cdot 29^{2}$. And since $3$ is a generator of the group, we would have
+\begin{align*}
+	\alpha_{1} &\equiv 3^{n/2^{2}} \equiv 3^{7\cdot 29^{2}} \equiv 10133 \mod 24389 \\
+	\alpha_{2} &\equiv 3^{n/7} \equiv 3^{2^{2}\cdot 29^{2}} \equiv 7302 \mod 24389 \\
+	\alpha_{3} &\equiv 3^{n/29^{2}} \equiv 3^{2^{2}\cdot 7} \equiv 11369 \mod 24389 \\
+	\beta_{1} &\equiv 3344^{n/2^{2}} \equiv 3344^{7\cdot 29^{2}} \equiv 24388 \mod 24389 \\
+	\beta_{2} &\equiv 3344^{n/7} \equiv 3344^{2^{2}\cdot 29^{2}} \equiv 4850 \mod 24389 \\
+	\beta_{3} &\equiv 3344^{n/29^{2}} \equiv 3344^{2^{2}\cdot 7} \equiv 23114 \mod 24389
+\end{align*}
+\par For $p_{1} = 2$, $e_{1} = 2$, $\alpha_{1} = 10133$, and $\beta_{1} = 24388$, we have $\gamma \equiv \alpha_{1}^{p_{1}^{e_{1}-1}} \equiv 10133^{2} \equiv -1 \mod 24389$. Then we can calculate
+\begin{align*}
+	\beta_{1,0} \equiv (10133^{0}\cdot 24388)^{2^{2-1-0}} \equiv [1\cdot (-1)]^{2} \equiv 1 \mod 24389
+\end{align*}
+and $d_{0} = 0$, $x_{1,1} \equiv x_{1,0} + p_{1}^{0}d_{0} \equiv 0 \mod 4$. Then by iteration, we have $\beta_{1,1} = -1$, $d_{1} = 1$, and $x_{1,2} = 2$. So $x_{1} = x_{1,2} = 2 \mod 4$.
+\par Similarly, we would have $x_{2} = 2 \mod 7$ and $x_{3} = 260 \mod 29^{2}$. Applying Chinese remainder theorem, we would have $x = 18762 \mod 2^{2}\cdot 7\cdot 29^{2}$.
+
+
+
+\section*{Ex. 3 - Elgamal}
+\begin{enumerate}
+\item  Assume $X^{3} + 2X^{2} + 1$ is reducible over $\mathbb{F}_{3}[X]$. Then we can find $(X+a)(X^{2} + bX + C) = X^{3} + a(b+1)X^{2} + (b+c)X + ac = X^{3} + 2X^{2} + 1$, where $a, b, c \in \{0, 1, 2\}$. So $a=1$, $b=-1$, $c=1$, or $a=2$, $b=-2$, $c=2$. But neither of the two cases would lead to $a(b+1) \equiv 2 \mod 3$. So $X^{3} + 2X^{2} + 1$ is irreducible over $\mathbb{F}_{3}[X]$. And since the degree is $3$, it defines the field $\mathbb{F}_{3^{3}}$, which has $27$ elements.
+
+\item Let $a \leftrightarrow X^{1}$, $b \leftrightarrow X^{2}$, $\cdots$, $z \leftrightarrow X^{26}$. We have $P(X) = X^{3} + 2X^{2} + 1$.
+\begin{table}[!ht]
+\centering
+\footnotesize
+\begin{tabular}{lll}
+	$X^{1} \equiv X \mod P(X)$ & $X^{2} \equiv X^{2} \mod P(X)$ & $X^{3} \equiv X^{2} - 1 \mod P(X)$ \\
+	$X^{4} \equiv X^{2} - X - 1 \mod P(X)$ & $X^{5} \equiv -X - 1 \mod P(X)$ & $X^{6} \equiv -X^{2} - X \mod P(X)$ \\
+	$X^{7} \equiv X^{2} + 1 \mod P(X)$ & $X^{8} \equiv X^{2} + X - 1 \mod P(X)$ & $X^{9} \equiv -X^{2} - X - 1 \mod P(X)$ \\
+	$X^{10} \equiv X^{2} - X + 1 \mod P(X)$ & $X^{11} \equiv X - 1 \mod P(X)$ & $X^{12} \equiv X^{2} - X \mod P(X)$ \\
+	$X^{13} \equiv -1 \mod P(X)$ & $X^{14} \equiv -X \mod P(X)$ & $X^{15} \equiv -X^2 \mod P(X)$ \\
+	$X^{16} \equiv - X^{2} + 1 \mod P(X)$ & $X^{17} \equiv - X^{2} + X + 1 \mod P(X)$ & $X^{18} \equiv X + 1 \mod P(X)$ \\
+	$X^{19} \equiv X^{2} + X \mod P(X)$ & $X^{20} \equiv - X^{2} - 1 \mod P(X)$ & $X^{21} \equiv - X^{2} - X + 1 \mod P(X)$ \\
+	$X^{22} \equiv X^{2} + X + 1 \mod P(X)$ & $X^{23} \equiv - X^{2} + X - 1 \mod P(X)$ & $X^{24} \equiv - X + 1 \mod P(X)$ \\
+	$X^{25} \equiv - X^{2} + X \mod P(X)$ & $X^{26} \equiv 1 \mod P(X)$ &
+\end{tabular}
+\end{table}
+
+\item The order of the subgroup generated by $X$ is shown in previous question, which is $26$.
+
+\item If we have $11$ as the secret key, we would have
+\begin{align*}
+	X^{11} \equiv X + 2 \mod P(X)
+\end{align*}
+\par Then the public key is $X + 2$.
+
+\newpage
+\item Randomly choose $k = 18$, map ``goodmorning'' to $\mathbb{F}_{3^{3}}$, we have
+\begin{table}[!ht]
+\centering
+\footnotesize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+$X^2 + 1$ & $-X^2$ & $-X^2$ & $X^2 - X - 1$ & $-1$ & $-X^2$ & $X + 1$ & $-X$ & $- X^2 - X - 1$ & $-X$ & $X^2 + 1$ \\
+\hline
+\end{tabular}
+\end{table}
+\par Then we would have
+\begin{align*}
+	r &\equiv X^{18} \equiv X + 1 \mod P(X) \\
+	\beta^{k} &\equiv (X+2)^{18} \mod P(X)
+\end{align*}
+\paragraph*{Encryption:} using equation
+\begin{align*}
+	t \equiv \beta^{k}m \equiv (X+2)^{18}m \mod P(X) \\
+\end{align*}
+\par The result is
+\begin{table}[!ht]
+\centering
+\footnotesize
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+$X^2 + X$ & $X$ & $X$ & $-X^2 + 1$ & $-X^{2} + X$ & $X$ & $X^{2} -X - 1$ & $1$ & $- X^2 - X + 1$ & $1$ & $X^2 + X$ \\
+\hline
+\end{tabular}
+\end{table}
+
+which is ``saapyadzuzs'' after mapping.
+\paragraph*{Decryption:} using equation
+\begin{align*}
+	tr^{-x} \equiv t(X+1)^{-11} \equiv m \mod P(X)
+\end{align*}
+\par The decryption is successful and get ``goodmorning''.
+\end{enumerate}
+
+
+
+\section*{Ex. 4 - Simple questions}
+\begin{enumerate}
+\item\begin{enumerate}[(i)]
+\item Yes, $h$ is pre-image resistant. Since $h(x) \equiv x^{2} \mod pq$, we can find $x$ by using Chinese remainder theorem with $\sqrt{h(x)} \mod p$ and $\sqrt{h(x)} \mod q$. However, it is infeasible to factorize $n$.
+
+\item No, $h$ is not second pre-image resistant. Let $x' = -x$, we would have $h(x) = h(x')$.
+
+\item No, $h$ is not collision resistant. Let $x' = -x$, we would have $h(x) = h(x')$.
+\end{enumerate}
+
+\item\begin{enumerate}[(i)]
+\item It is efficiently computed for any input since $\oplus$ is fast.
+
+\item Pre-image resistant is not verified. Given $y$ it is feasible to find or design $m$ such that $h(m) = y$.
+
+\item Second pre-image resistant is not verified. There are many combination can lead to same $h(m)$.
+
+\item Collision resistant is not verified. There are many combination can lead to same $h(m)$.
+\end{enumerate}
+\end{enumerate}
+
+
+
+\section*{Ex. 5 - Merkle-Damg$\mathrm{\mathbf{\mathring{a}}}$rd construction}
+\begin{enumerate}
+\item \begin{enumerate}[a)]
+\item Since $f(0)=0$ and $f(1)=01$, $f(x_{i})$ is always start with $0$. So $y$ can be separated into several segments start from $0$, except for the first two digits. Those segments are injective with $x_{i}$, so the map $s$ from $x$ to $y$ is injective.
+
+\item If $z$ is empty, from what previous proved, there's no such $x'$. If $z$ is not empty, since we have $11$ at the beginning of $y_{i+1}$, so no this no such $x'$ and $z$ such that $s(x) = z \| s(x')$ .
+\end{enumerate}
+
+\item Because the previous conditions guarantee the mapping is collision resistant.
+\end{enumerate}
+\end{document}

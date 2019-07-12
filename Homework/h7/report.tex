@@ -76,7 +76,6 @@
 	\item Alice computes $c = g_{1}^{x_{1}}g_{2}^{x_{2}}$, $d = g_{1}^{y_{1}}g_{2}^{y_{2}}$, and $h = g_{1}^{z}$.
 	\item Alice publishes $\left( c, d, h \right)$ and $G$, $q$, $g_{1}$, $g_{2}$ as her public key. She retains $\left( x_{1}, x_{2}, y_{1}, y_{2}, z \right)$ as her private key.
 	\end{itemize}
-
 \par \textbf{Encryption:}
 	\begin{itemize}
 	\item Bob converts plaintext into an element $m$ in group $G$.
@@ -89,40 +88,103 @@
 		\end{itemize}
 	\item Bob sends the ciphertext $\left( u_{1}, u_{2}, e, v \right)$ to Alice.
 	\end{itemize}
-	
 \par \textbf{Decryption:}
 	\begin{itemize}
-		\item Alice computes $\alpha = H(u_{1}, u_{2}, e)$ and verifies that 
+		\item Alice computes $\alpha = H(u_{1}, u_{2}, e)$ and verifies that $u_{1}^{x_{1}}u_{2}^{x_{2}}(u_{1}^{y_{1}}u_{2}^{y_{2}})^{\alpha} = v$. If it fails, further decryption is aborted.
+		\item Since $u_{1}^{z} = g_{1}^{kz} = h^{k}$, and $m = \frac{e}{h^{k}}$, Alice computes the plaintext as $m = \frac{e}{u_{1}^{z}}$.
 	\end{itemize}
 
-\item 
-\item
+\item Adaptive chosen ciphertext attacks is an iterative chosen ciphertext attack scenario in which the attacker gradually reveal information about an ciphertext $c$ or private key by iteratively sending new ciphertexts $c'$, $c''$, $\cdots$ that are related to the original ciphertext $c$ to the receiver and analysis the response. However, in the decryption stage of Cramer-Shoup cryptosystem, there's a verification stage where invalid ciphertexts would be rejected. Also, since $H$ is a collision-resistant cryptographic hash function, it's practically infeasible to find enough chosen ciphertext to attack.
+
+\item \begin{itemize}
+	\item \textbf{Similarities:} Both cryptosystems are based on the DLP in a cyclic group.
+	
+	\item \textbf{Differences:} Cramer-Shoup cryptosystem uses a collision-resistant cryptographic hash function for verification to avoid adaptive chosen ciphertext attacks, while the Elgamal cryptosystem doesn't.
+	\end{itemize}
 \end{enumerate}
 
 
 
 \subsection*{Ex. 2 - Simple questions}
 \begin{enumerate}
-\item
-\item
+\item According to Fermat's little theorem, if $p$ is prime and $p \nmid \alpha$, then $a^{p-1} \equiv 1 \mod p$. $h(x)$ is not second pre-image resistant because given $x$, it is easy to find $x' = x + p - 1$ such that $h(x) = h(x')$. So, it is not a good cryptographic hash function.
+
+\item We would have
+	\begin{align*}
+	&\left\lfloor 2^{30}\sqrt{2} \right\rfloor = \left\lfloor 40000000‬\sqrt{2} \right\rfloor = 5A827999 &= K_{i}, \quad &\mbox{where } 0 \leq i \leq 19 \\
+	&\left\lfloor 2^{30}\sqrt{3} \right\rfloor = \left\lfloor 40000000‬\sqrt{3} \right\rfloor = 6ED9EBA1 &= K_{i}, \quad &\mbox{where } 20 \leq i \leq 39 \\
+	&\left\lfloor 2^{30}\sqrt{4} \right\rfloor = \left\lfloor 40000000‬\sqrt{4} \right\rfloor = 8F1BBCDC &= K_{i}, \quad &\mbox{where } 40 \leq i \leq 59 \\
+	&\left\lfloor 2^{30}\sqrt{5} \right\rfloor = \left\lfloor 40000000‬\sqrt{5} \right\rfloor = CA62C1D6 &= K_{i}, \quad &\mbox{where } 60 \leq i \leq 79
+	\end{align*}
 \end{enumerate}
 
 
 
 \subsection*{Ex. 3 - Birthday paradox}
 \begin{enumerate}
-\item
-\item
-\item
-\item
+\item Since $g(x) = \ln(1-x) + x + x^{2}$, we have
+	\begin{align*}
+	\frac{d g(x)}{d x} = -\frac{1}{1-x} + 1 + 2x
+	\end{align*}
+\par When $\frac{dg(x)}{dx} = 0$, we have $x_{1} = 0$ and $x_{2} = \frac{1}{2}$. Also, since
+	\begin{align*}
+	\frac{d^{2} g(x)}{d x^{2}} &= -\frac{1}{(1-x)^{2}} + 2 \\
+	\left.\frac{d^{2} g(x)}{d x^{2}}\right\vert_{x = 0} &= 1 > 0 \\
+	\left.\frac{d^{2} g(x)}{d x^{2}}\right\vert_{x = \frac{1}{2}} &= -2 < 0 \\
+	\end{align*}
+we could conclude that for $x \in \left[0, \frac{1}{2}\right]$, $g(x) \in \left[g(0), g\left(\frac{1}{2}\right)\right]$. So $g(x) \geq g(0) = 0$, which gives $-x-x^{2} \leq \ln(1-x)$.
+\par Then having $h(x) = \ln(1-x) + x$, we can apply similar method and finally get $\ln(1-x) \leq -x$.
+\par In all, when $x \in \left[0, \frac{1}{2}\right]$, $-x-x^{2} \leq \ln(1-x) \leq -x$.
+
+\item Since $j \in [1, r-1]$ and $r \leq \frac{n}{2}$, we would have $\frac{j}{n} \in \left[0, \frac{1}{2}\right]$, thus, according to the result from previous problem
+	\begin{align*}
+	-\frac{j}{n} - \left(\frac{j}{n}\right)^{2} \leq \ln(1 - \frac{j}{n}) \leq -\frac{j}{n}
+	\end{align*}
+\par Then, since $r > 1$, apply the sum to each parts,
+	\begin{align*}
+	\sum_{j=1}^{r-1}\left[-\frac{j}{n} - \left(\frac{j}{n}\right)^{2}\right] &= -\frac{(r-1)r}{2n} - \frac{r(r-1)(2r-1)}{6n^{2}} > -\frac{(r-1)r}{2n} - \frac{r^{3}}{3n^{2}} \\
+	\sum_{j=1}^{r-1}\left[-\frac{j}{n}\right] &= -\frac{(r-1)r}{2n}
+	\end{align*}
+\par So, in all, we would have
+	\begin{align*}
+	-\frac{(r-1)r}{2n} - \frac{r^{3}}{3n^{2}} \leq \sum_{j=1}^{r-1}\ln\left(1-\frac{j}{n}\right) \leq -\frac{(r-1)r}{2n}
+	\end{align*}
+
+\item Apply exponentiate to the previous inequality equation, we would have
+	\begin{align*}
+	\exp\left(-\frac{(r-1)r}{2n}-\frac{r^3}{3n^2}\right) \leq \prod_{j=1}^{r-1}\left(1-\frac{j}{n}\right) \leq \exp\left(-\frac{(r-1)r}{2n}\right)
+	\end{align*}
+\par Let $\lambda = \frac{r^2}{2n}$, $c_{1} = \sqrt{\frac{\lambda}{2}}$, and $c_{2} = \sqrt{\frac{\lambda}{2}}$, we would have
+	\begin{align*}
+	e^{-\lambda}e^{c_{1}/\sqrt{n}} \leq \prod_{j=1}^{r-1} \left(1-\frac{j}{n}\right) \leq e^{-\lambda}e^{c_{2}/\sqrt{n}}
+	\end{align*}
+
+\item When $\lambda < \frac{n}{8}$, we would have
+	\begin{align*}
+	\lambda = \frac{r^2}{2n} < \frac{n}{8}
+	\end{align*}
+which gives $r < \frac{n}{2}$. Also, when $n$ is large,
+	\begin{align*}
+	\lim_{n\to\infty}e^{c_1/\sqrt{n}} &= \lim_{n\to\infty}e^0 = 1 \\
+	\lim_{n\to\infty}e^{c_2/\sqrt{n}} &= \lim_{n\to\infty}e^0=1
+	\end{align*}
+\par So, we would have
+	\begin{align*}
+	\prod_{j=1}^{r-1}\left(1-\frac{j}{n}\right) \approx e^{-\lambda}
+	\end{align*}
 \end{enumerate}
 
 
 
 \subsection*{Ex. 4 - Birthday attack}
 \begin{enumerate}
-\item
-\item
+\item The probability of seeing two plates ending with the same three digits is calculated as
+	\begin{align*}
+	P = 1 - \prod_{j=1}^{39}\left(1 - \frac{j}{1000}\right) \approx 0.546
+	\end{align*}
+
+\item 
+
 \item
 \end{enumerate}
 
@@ -131,8 +193,11 @@
 \subsection*{Ex. 5 - Faster multiple modular exponentiation}
 \begin{enumerate}
 \item
+
 \item
+
 \item
+
 \item
 \end{enumerate}
 \end{document}

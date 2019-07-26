@@ -1,0 +1,234 @@
+\documentclass[11pt,a4paper]{article}
+% \usepackage[utf8]{inputenc}
+% \usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+% \usepackage[demo]{graphicx}
+
+% My packages
+\usepackage{algorithm, algorithmicx, algpseudocode} % Algorithm {algorithmic, listings}
+\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
+\usepackage{color, xcolor} % Color
+\usepackage{diagbox, tabularx} % Table
+\usepackage{enumerate} % List
+\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
+\usepackage{fancybox}
+\usepackage{verbatim}
+
+% \usepackage[font=footnotesize]{caption} % labelfont=bf
+% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\epstopdfsetup{outdir=./Figure/Converted/}
+\graphicspath{{./Figure/}}
+
+\makeatletter
+\def\input@path{{./Figure/}}
+\makeatother
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\floatname{algorithm}{Algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\pgfplotsset{compat=1.13}
+
+\newcommand{\image}[3]{
+	\begin{figure}[!ht]
+		\centering
+	    \includegraphics[width=#1\textwidth]{#2}
+		\caption{#3}
+		\label{fig:#2}
+	\end{figure}
+}
+
+\title{
+	VE475 Introduction to Cryptography \\
+	Homework 8
+}
+\author{
+	Jiang, Sifan\\
+	jasperrice@sjtu.edu.cn\\
+	515370910040
+}
+
+
+\begin{document}
+\maketitle
+\section*{Ex. 1 - \textit{Lamport one-time signature scheme}}
+\begin{enumerate}
+\item Lamport one-time signature scheme can be build from any cryptographically secure one-way function, and usually a cryptographic hash function is used. Let $f$ be a one-way function and message space $M = \{0, 1\}^{n}$.
+	\begin{itemize}
+	\item \textbf{Keys generation:} The private key $K$ is a table containing $2n$ random strings each of length $k$ as follows:
+		\begin{table}[!ht]
+			\centering
+			\begin{tabular}{|c|c|c|c|}
+				\hline
+				$x_{0}^{1}$ & $x_{0}^{2}$ & $\cdots$ & $x_{0}^{n}$ \\
+				\hline
+				$x_{1}^{1}$ & $x_{1}^{2}$ & $\cdots$ & $x_{1}^{n}$ \\
+				\hline
+			\end{tabular}
+		\end{table}
+	\par Hence for $1 \leq i \leq n$, we have $x_{j}^{i} \leftarrow \{0, 1\}^{k}$, where $j \in \{0, 1\}$. Now let $y_{j}^{i} = f(x_{j}^{i})$. Public key is generated with $f$ applied to all strings in the private key $K$:
+		\begin{table}[!ht]
+			\centering
+			\begin{tabular}{|c|c|c|c|}
+				\hline
+				$y_{0}^{1}$ & $y_{0}^{2}$ & $\cdots$ & $y_{0}^{n}$ \\
+				\hline
+				$y_{1}^{1}$ & $y_{1}^{2}$ & $\cdots$ & $y_{1}^{n}$ \\
+				\hline
+			\end{tabular}
+		\end{table}
+	
+	\item \textbf{Signing a message:} Suppose message $m = m_{1} \| m_{2} \| \cdots \| m_{n}$ for each $m_{i} \in \{0, 1\}$. Reveal $x_{m_{i}}^{i}$ for $1 \leq i \leq n$ and signature $\sigma = x_{m_{1}}^{1}, x_{m_{2}}^{2}, \cdots, x_{m_{n}}^{n}$.
+	
+	\item \textbf{Verifying a signature:} Check that $f(x_{m_{i}}^{i}) = y_{m_{i}}^{i}$ for all $1 \leq i \leq n$.
+	\end{itemize}
+
+\item \textbf{Benefits:}
+	\begin{itemize}
+	\item Lamport signatures can be built from any cryptographically secure one-way function, which is convenient for implementation.
+	\item Lamport signatures with large hash functions would be secure in quantum computers.
+	\end{itemize}
+\par \textbf{Drawbacks:}
+	\begin{itemize}
+	\item The security of Lamport signatures is based on security of the one-way hash function chosen, the length of its output and the quality of the input.
+	\item The private key can only be used once.
+	\end{itemize}
+
+\item When the key is used for the first time, attacker would know half of the private key. If the same key is used for the second time, it's very likely to further leak private key.
+
+\item In a Merkle tree, every leaf node is labelled with the hash of a data block and every non-leaf node is labelled with the cryptographic hash of the labels of its child nodes. Merkle trees is efficient and secure to verify with large data structures. Merkle tree can be apply on Lamport one-time signature scheme, so that different messages can be signed with the same public key and still be secure.
+\end{enumerate}
+
+\section*{Ex. 2 - \textit{Chaum-van Antwerpen signatures}}
+\begin{enumerate}
+\item
+	\begin{enumerate}[a)]
+	\item For each value $r$, $e_{1}$ is randomly generated, so there are $q$ different choices. Then $e_{2}$ is chosen such that
+		\begin{align*}
+		\beta^{e_2} \equiv \alpha^{xe_2} \equiv rs^{-e_1} \mod p
+		\end{align*}
+	since $r \equiv s^{e_{1}} \beta^{e_{2}} \mod p$.
+	\par Since $\alpha$ is a generator of $G$ and $G$, of order $q$, is a subgroup of $F_{p}^*$, at least one $e_{2}$ can be found given $e_{1}$. So there are at least $q$ ordered pairs $\langle e_{1}, e_{2} \rangle$ can be considered.
+	
+	\item Take the equations in to the system of congruences, we have
+		\begin{align*}
+		\left\lbrace \begin{matrix}
+		\alpha^{i} \equiv \alpha^{l e_{1} + x e_{2}} \mod p \\
+		\alpha^{j} \equiv \alpha^{k e_{1} + e_{2}} \mod p
+		\end{matrix} \right.
+		\end{align*}
+	\par Then
+		\begin{align*}
+		\left\lbrace \begin{matrix}
+		i \equiv l e_{1} + x e_{2} \mod (p-1) \\
+		j \equiv k e_{1} + e_{2} \mod (p-1)
+		\end{matrix} \right.		
+		\end{align*}
+	\par Since $s \not\equiv m^{x} \mod p$, we can get $l \not\equiv kx \mod (p-1)$. So, the unique solution can be found.
+		\begin{align*}
+		\left\lbrace \begin{matrix}
+		e_{1} \equiv (l-kx)^{-1}(i-xj) \mod (p-1) \\
+		e_{2} \equiv (kx-l)^{-1}(ki-lj) \mod (p-1)
+		\end{matrix} \right.
+		\end{align*}
+	
+	\item Since there are at least $q$ ordered pairs of $\langle e_{1}, e_{2} \rangle$, but there is only one pair such that $s \equiv m^{x} \mod p$, the probability of wrong $s$ will be accepted as a valid signature is less than $\frac{1}{q}$.
+	\end{enumerate}
+
+\item
+	\begin{enumerate}[a)]
+	\item We have
+		\begin{align*}
+		t_{1} \equiv r_{1}^{x^{-1}} \equiv s^{e_{1}x^{-1}}\alpha^{e_{2}} &\mod p \\
+		\left(t_{1}\alpha^{-e_{2}}\right)^{f_{1}} \equiv s^{e_{1}f_{1}x^{-1}} &\mod p
+		\end{align*}
+	
+	\item
+		\begin{align*}
+		t_{2} \equiv r_{2}^{x^{-1}} \equiv s^{f_{1}x^{-1}}\alpha^{f_{2}} &\mod p \\
+		\left(t_{2}\alpha^{-f_{2}}\right)^{e_{1}} \equiv s^{e_{1}f_{1}x^{-1}} &\mod p
+		\end{align*}
+	\par So we have 
+		\begin{align*}
+		\left(t_{1}\alpha^{-e_{2}}\right)^{f_{1}} \equiv \left(t_{2}\alpha^{-f_{2}}\right)^{e_{1}} \mod p
+		\end{align*}
+	\par If $s \not\equiv m^{x} \mod p$, we have
+		\begin{align*}
+		t_{1} \equiv r^{x^{-1}} \equiv s^{e_{1}x^{-1}}\beta^{e_{2}x^{-1}} &\mod p \\
+		t_{1} \not\equiv m^{e_{1}}\alpha^{e_{2}} &\mod p
+		\end{align*}
+	\par Similarly, we have $t_{2} \not\equiv m^{f_{1}}\alpha^{f_{2}} \mod p$.
+	\par Testing the congruence $\left(t_{1} \alpha^{-e_{2}} \right)^{f_{1}} \equiv \left(t_{2}\alpha^{-f_{2}}\right)^{e_{1}} \mod p$ would ensure Alice that Bob is not trying to disavow a valid signature.
+	\end{enumerate}
+
+\item
+	\begin{enumerate}[a)]
+	\item
+	
+	\item Yes.
+	
+	\item If $q$ is large, $\frac{1}{q}$ is approximated to zero, meaning Bob can convince Alice that a valid signature is a forgery.
+	\end{enumerate}
+\end{enumerate}
+
+\section*{Ex. 3 - \textit{Simple questions}}
+\begin{enumerate}
+\item Since $q = 101$ and $p = 7879$, we have $p - 1 = 78 \cdot q$.
+	\begin{enumerate}[a)]
+	\item If $k = 49$, we have
+		\begin{align*}
+		\alpha^{k} \equiv 170^{49} \equiv 1176 &\mod p \\
+		r \equiv 1176 \equiv 59 &\mod q \\
+		k^{-1} \equiv 49^{-1} \equiv 33 &\mod q \\
+		s \equiv k^{-1}(m+xr) \equiv 79 &\mod q
+		\end{align*}
+	\par Then $\langle r, s \rangle = \langle 59, 79 \rangle$  is the signature of $m = 52$.
+	
+	\item
+		\begin{align*}
+		s^{-1} \equiv 79^{-1} \equiv 78 &\mod q \\
+		s^{-1}m \equiv 78 \cdot 52 \equiv 16 &\mod q \\
+		s^{-1}r \equiv 78 \cdot 59 \equiv 57 &\mod q \\
+		\alpha^{16}\beta^{57}=170^{16}\cdot 4567^{57} \equiv 1776 &\mod p \\
+		v \equiv 1776 \equiv 59 &\mod q
+		\end{align*}
+	\par Since $v = r = 59$, the signature is valid.
+	\end{enumerate}
+
+\item \textbf{For $\mathbf{\langle m_{1}, 23972, 31396 \rangle}$:}
+\par \textbf{For $\mathbf{\langle m_{2}, 23972, 20481} \rangle$:}
+
+\par Since
+	\begin{align*}
+	\beta^{r} r^{s_{1}} \equiv \alpha^{m_{1}} &\mod p \\
+	\beta^{r} r^{s_{2}} \equiv \alpha^{m_{2}} &\mod p
+	\end{align*}
+we have
+	\begin{align*}
+	\alpha^{m_{1} - m_{2}} \equiv r^{s_{1} - s_{2}} \equiv \alpha^{k(s_{1} - s_{2})} &\mod p
+	\end{align*}
+\par We would then have
+	\begin{align*}
+	m_{1} - m_{2} \equiv k(s_{1} - s_{2}) &\mod (p - 1) \\
+	8990 - 31415 \equiv k(31396 - 20481) &\mod (31847 - 1) \\
+	10915k \equiv -22425 \equiv 9421‬ &\mod 31846
+	\end{align*}
+\par Since the multiplicative inverse of $9421 \mod 31846$ is $6115$, we have
+	\begin{align*}
+	10915 \cdot 6115 \cdot k \equiv 27855 \cdot k‬ \equiv 1 &\mod 31846 \\
+	k \equiv 27855^{-1} \equiv 1165 &\mod 31846
+	\end{align*}
+\par Then
+	\begin{align*}
+	s_{1} \equiv k^{-1}(m_{1} - xr) &\mod (p-1) \\
+	s_{1}k \equiv m_{1} - xr &\mod (p-1) \\
+	17132 \equiv 8990 - 23972 x &\mod 31846 \\
+	23972 x \equiv -8142 &\mod 31846 \\
+	x \equiv 14918 &\mod 31846
+	\end{align*}
+\end{enumerate}
+\end{document}

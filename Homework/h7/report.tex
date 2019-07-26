@@ -5,7 +5,7 @@
 % \usepackage[demo]{graphicx}
 
 % My packages
-\usepackage{algorithm, algorithmic, listings} % Code
+\usepackage{algorithm, algorithmicx, algpseudocode} % Algorithm {algorithmic, listings}
 \usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
 \usepackage{color, xcolor} % Color
 \usepackage{diagbox, tabularx} % Table
@@ -25,10 +25,13 @@
 \def\input@path{{./Figure/}}
 \makeatother
 
-\pgfplotsset{compat=1.13}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\floatname{algorithm}{Algorithm}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\pgfplotsset{compat=1.13}
 
 \newcommand{\image}[3]{
 	\begin{figure}[!ht]
@@ -58,10 +61,33 @@
 \item \begin{enumerate}[a)]
 \item Since $f(0)=0$ and $f(1)=01$, $f(x_{i})$ is always start with $0$. So $y$ can be separated into several segments start from $0$, except for the first two digits. Those segments are injective with $x_{i}$, so the map $s$ from $x$ to $y$ is injective.
 
-\item If $z$ is empty, from what previous proved, there's no such $x'$. If $z$ is not empty, since we have $11$ at the beginning of $y_{i+1}$, so no this no such $x'$ and $z$ such that $s(x) = z \| s(x')$ .
+\item If $z$ is empty, from what previous proved, there's no such $x'$. If $z$ is not empty, since we have $11$ at the beginning of $y_{i+1}$, so there's no $x'$ and $z$ such that $s(x) = z \| s(x')$.
 \end{enumerate}
 
 \item Because the previous conditions guarantee the mapping is collision resistant.
+
+\item Assuming we have a collision on $h$, i.e. $x \neq x'$ and $h(x) = h(x')$, we will prove that a collision on the compression function $g$ can be efficiently found.
+\par First note that if $x \neq x'$, since the map $s$ from $x$ to $y$ is injective, it would always lead to $y \neq y'$. Let $k$ and $k'$ denote the number blocks for $y$ and $y'$.
+\par \textbf{Case 1:} consider $k = k'$. This implies $y_{k} = y_{k'}$, and we have
+	\begin{align*}
+	g(z_{k-1}\|y_{k}) &= z_{k} = h(x) \\
+	&= h(x') = z_{k'} \\
+	&= g(z_{k'-1}\|y_{k'})
+	\end{align*}
+\par If $z_{k} \neq z_{k'}$, then a collision is found. Otherwise we repeat the process and get
+	\begin{align*}
+	g(z_{k-2}\|y_{k-1}) &= z_{k-1} = h(x) \\
+	&= h(x') = z_{k'-1} \\
+	&= g(z_{k'-2}\|y_{k'-1})
+	\end{align*}
+\par Then either we have found a collision or we continue backward until one is obtained. If none is found then we get $z_{i} = z_{i'}$, where $i \in [1, k]$.
+\par \textbf{Case 2:} consider $k \neq k'$. Without loss of generality assume $k'$ and proceed as in case $1$. If no collision is found before $k = 1$, then we have
+	\begin{align*}
+	g(0^{m}\|y_{1}) &= z_{1} \\
+	&= z_{k'-k+1} \\
+	&= g(z_{k'-k}\|y_{k'-k+1})
+	\end{align*}
+\par Since there is not strings $x \neq x'$ and $z$ such that $s(x) = z \| s(x')$, the collision is found.
 \end{enumerate}
 
 
@@ -180,24 +206,45 @@ which gives $r < \frac{n}{2}$. Also, when $n$ is large,
 \begin{enumerate}
 \item The probability of seeing two plates ending with the same three digits is calculated as
 	\begin{align*}
-	P = 1 - \prod_{j=1}^{39}\left(1 - \frac{j}{1000}\right) \approx 0.546
+	P = 1 - \prod_{j=1}^{39}\left(1 - \frac{j}{1000}\right) \approx 0.54637
 	\end{align*}
 
-\item 
+\item The probability that one of the $40$ license plates observed has the same $3$ last digits is calculated as
+	\begin{align*}
+	P = 40\left(\frac{1}{1000}\right)\left(\frac{999}{1000}\right)^{39} \approx 0.038469
+	\end{align*}
 
-\item
+\item From question $1$, we can tell that it's not collision resistant, but from question $2$, we can tell that it's second pre-image resistant. So Alice can prevent the collision by changing the message from Eve a little bit.
 \end{enumerate}
 
 
 
 \subsection*{Ex. 5 - Faster multiple modular exponentiation}
 \begin{enumerate}
-\item
+\item The time complexity to compute $\alpha^{a} \mod n$ is $\mathcal{O}\left((\log n)^{2}\log a\right)$. The time complexity to compute $\beta^{b} \mod n$ is $\mathcal{O}\left((\log n)^{2}\log b\right)$. So the time complexity of this method is $\mathcal{O}\left((\log n)^{2}(\log a + \log b)\right)$.
 
-\item
-
-\item
-
-\item
+\item The algorithm is shown in alg~\ref{alg:FMME}.
+	\begin{algorithm}[!ht]
+		\caption{Faster Multiple Modular Exponentiation}
+		\label{alg:FMME}
+		\begin{algorithmic}[1]
+			\Require $\alpha$, $\beta$, $a = (a_{k_{a}-1}\cdots a_{0})_{2}$, $b = (b_{k_{b}-1}\cdots b_{0})_{2}$, and $n$ five integers
+			\Ensure $\alpha^{a}\beta^{b} \mod n$
+			\State $k \leftarrow \max(k_{a}, k_{b})$
+			\State $power \leftarrow 1$	
+			\For{$i \leftarrow k-1$ \textbf{to} $0$}
+				\State $power \leftarrow (power\cdot power) \mod n$
+				\If{$a_{i} = 1$}
+					\State $power \leftarrow (\alpha \cdot power) \mod n$
+				\EndIf
+				\If{$b_{i} = 1$}
+					\State $power \leftarrow (\beta \cdot power) \mod n$
+				\EndIf
+			\EndFor
+			\State \Return{$power$}
+		\end{algorithmic}
+	\end{algorithm}
+	
+\item If $a$ and $b$ are $l$ bits long, $l$ squaring and multiplications are necessary to compute $\alpha^{a}\beta^{b} \mod n$.
 \end{enumerate}
 \end{document}

@@ -1,0 +1,81 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{time}
+% \usepackage[demo]{graphicx}
+
+% My packages
+\usepackage{algorithm, algorithmic, listings} % Code
+\usepackage{amsmath, amstext, amssymb, amsfonts, amsthm, dsfont, cancel, gensymb, mathtools, textcomp} % Math
+\usepackage{color, xcolor} % Color
+\usepackage{diagbox, tabularx} % Table
+\usepackage{enumerate} % List
+\usepackage{epsfig, epstopdf, graphicx, multicol, multirow, palatino, pgfplots, subcaption, tikz} % Image.
+\usepackage{fancybox}
+\usepackage{verbatim}
+
+% \usepackage[font=footnotesize]{caption} % labelfont=bf
+% \usepackage[font=scriptsize]{subcaption} % labelfont=bf
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\epstopdfsetup{outdir=./Figure/Converted/}
+\graphicspath{{./Figure/}}
+
+\makeatletter
+\def\input@path{{./Figure/}}
+\makeatother
+
+\pgfplotsset{compat=1.14}
+
+\newcommand{\image}[3]{
+	\begin{figure}[!ht]
+		\centering
+	    \includegraphics[width=#1\textwidth]{#2}
+		\caption{#3}
+		\label{fig:#2}
+	\end{figure}
+}
+
+\title{
+	VE475 Introduction to Cryptography \\
+	Homework 9
+}
+\author{
+	Jiang, Sifan\\
+	jasperrice@sjtu.edu.cn\\
+	515370910040
+}
+
+
+\begin{document}
+\maketitle
+\section*{Ex. 1 - \textit{Missile or not missile ...}}
+\par ($t, w$)-threshold scheme could be used, where $t = 10$ and $w = 30$. The general is given $10$ shares. Each colonel is given $5$ shares. Each clerk is given $2$ shares.
+
+
+
+\section*{Ex. 2 - \textit{Asmuth-Bloom Threshold Secret Sharing Scheme}}
+\par Let $k \in \mathbb{Z}$ and $2 \leq k \leq n$. Considering a sequence of positive integers $m_{0} < m_{1} < \cdots < m_{n}$ such that $$
+
+
+
+\section*{Ex. 3 - \textit{Shamir's Threshold Secret Sharing Scheme}}
+\par 
+
+
+
+\section*{Ex. 4 - \textit{Simple questions}}
+	\begin{enumerate}
+	\item 
+	\end{enumerate}
+
+
+
+\section*{Ex. 5 - \textit{Reed Solomon codes}}
+	\begin{enumerate}
+	\item
+	
+	\item 
+	\end{enumerate}
+\end{document}
